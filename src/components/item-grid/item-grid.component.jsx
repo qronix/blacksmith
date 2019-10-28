@@ -4,7 +4,7 @@ import ItemGridRow from '../item-grid-row/item-grid-row.component';
 
 import './item-grid.styles.scss';
 
-const ItemGrid = ()=> {
+const ItemGrid = () => {
     return(
         <div className='item-grid'>
            <ItemGridRow/>
