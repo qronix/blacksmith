@@ -35,12 +35,12 @@ const GameContainer = ()=> {
             img:'../../assets/sword.jpg'
         },
         {
-            itemName:'Flail',
-            moneyPerSecond:10,
-            img:'../../assets/sword.jpg'
+            itemName:'Hatchet',
+            moneyPerSecond:20,
+            img:'../../assets/hatchet.jpg'
         },
     ]);
-
+    
     const [sourceItem, setSourceItem] = useState({
         gridId:[],
         itemName:null
