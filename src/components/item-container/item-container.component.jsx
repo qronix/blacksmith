@@ -2,9 +2,9 @@ import React from 'react';
 
 import './item-container.styles.scss';
 
-const ItemContainer = () => {
+const ItemContainer = ({handleClick, rowItemId}) => {
     return(
-        <div className='item-container'>
+        <div className='item-container' draggable="true" onClick={()=>handleClick(rowItemId)}>
             1
         </div>
     );
