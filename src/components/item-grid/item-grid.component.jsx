@@ -12,7 +12,7 @@ const ItemGrid = ({gridItems, handleItemClick}) => {
 
     const buildGrid = ()=> {
         const gridRows = [];
-        for(let i=0;i<5;i++){
+        for(let i=0;i<6;i++){
             let gridRow = <ItemGridRow items={gridItems[i]} key={uuid()} rowId={i} handleItemClick={handleItemClick}/>;
             gridRows.push(gridRow);
         }

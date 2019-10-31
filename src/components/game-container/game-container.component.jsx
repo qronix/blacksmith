@@ -8,13 +8,15 @@ import './game-container.styles.scss';
 
 const GameContainer = ()=> {
 
+    //store index identifiers for the items array
+    //eg a 0 would be the first index in the items array
     const [gridItems, setGridItems] = useState([
         [0,1,2,3,],
-        [-1,-1,-1,-1,],
-        [-1,-1,-1,-1,],
-        [4,5,6,7,],
-        [-1,-1,-1,-1,],
-        [-1,-1,-1,-1,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [4,1,6,7,],
+        [0,0,0,0,],
+        [0,0,0,0,],
     ]);
     const [playerData, setPlayerData] = useState({
         money:0,
@@ -23,34 +25,101 @@ const GameContainer = ()=> {
     });
     const [items, setItems] = useState([
         {
+            itemName:'Empty',
+            moneyPerSecond:0,
+            img:null,
+        },
+        {
             itemName:'Sword',
             moneyPerSecond:10,
             img:'../../assets/sword.jpg'
-        }
+        },
+        {
+            itemName:'Flail',
+            moneyPerSecond:10,
+            img:'../../assets/sword.jpg'
+        },
     ]);
 
-    const [sourceItem, setSourceItem] = useState(null);
+    const [sourceItem, setSourceItem] = useState({
+        gridId:[],
+        itemName:null
+    });
     // const [targetItem, setTargetItem] = useState(null);
 
     const handleItemClick = (itemIdentifier)=> {
-        console.log('Swapping items! Look out!');
-        console.log('Source item: ', sourceItem);
         const [rowId, itemId] = itemIdentifier;
-        // console.log(`Clicked item with rowId: ${rowId} and itemId: ${itemId}` );
-        // console.log(`Item ${rowId}, ${itemId} has item with id: ${gridItems[rowId][itemId]}`);
-        if(!sourceItem){
-            setSourceItem([[rowId],[itemId]]);
-        }else{
-            //multidimensional array swap
-            //[targetArray[index1][element1],targetArray[index2][element2]] = [targetArray[index2][element2],targetArray[index1][element1]]
-            console.log('Source item', sourceItem);
-            const [sourceIndex, sourceElement] = sourceItem;
-            let prevGridItems = gridItems;
-            [prevGridItems[sourceIndex][sourceElement], prevGridItems[rowId][itemId]] = [prevGridItems[rowId][itemId],prevGridItems[sourceIndex][sourceElement]];
-            setGridItems(prevGridItems);
-            setSourceItem(null);
-            console.dir(gridItems);
+        const itemIndex = gridItems[rowId][itemId];
+        const itemName = items[itemIndex];
+
+        if(sourceItem.itemName===null){
+            //if there is no current sourceItem
+            //get item location on grid and item level
+            //set source item to the item which was clicked
+            return setSourceItem(
+                {
+                    gridId: [[rowId],[itemId]],
+                    itemName
+                }
+            );
         }
+        //add check to see if this is the same item,
+        //if it is the same item, reset the source item and 
+        //deselect the clicked item
+
+        //if there IS a source item this means we previously selected an item
+        //now we are going to check to see if these items are the same
+        //if they are, we will merge the items into the next level of item
+        //then we will set the current source location (the second item we clicked)
+        //to be empty and reset the source item to an empty item
+        else{
+            //first selected item
+            const [sourceIndex, sourceElement] = sourceItem.gridId;
+            let prevGridItems = gridItems;
+
+            //check to see if both selected items are the same
+            if(sourceItem.itemName === itemName){
+                console.log('Source item name: ', sourceItem.itemName);
+                console.log('Current item name: ', itemName);
+                //multidimensional array swap
+                //[targetArray[index1][element1],targetArray[index2][element2]] = [targetArray[index2][element2],targetArray[index1][element1]]
+                
+                
+                
+                //advance the target item to the next item level
+                prevGridItems[rowId][itemId] += 1;
+
+                //set the previous item to a blank item
+                prevGridItems[sourceIndex][sourceElement] = 0;
+
+                //set source back to an empty item
+                // setSourceItem({
+                //     gridId: [],
+                //     itemName: null
+                // });
+
+                // setGridItems(prevGridItems);
+
+                // [prevGridItems[sourceIndex][sourceElement], prevGridItems[rowId][itemId]] = [prevGridItems[rowId][itemId],prevGridItems[sourceIndex][sourceElement]];
+            }
+            //if no item is in this spot
+            //swap the items
+            else if(itemName === 'Empty'){
+                [prevGridItems[sourceIndex][sourceElement], prevGridItems[rowId][itemId]] = [prevGridItems[rowId][itemId],prevGridItems[sourceIndex][sourceElement]];
+                
+            }
+            else{
+                console.log('These items are not the same and cannot be merged');
+            }
+            setSourceItem({
+                gridId: [],
+                itemName: null
+            });
+
+            setGridItems(prevGridItems);
+        }
+        console.dir(gridItems);
+
     }
     
     return(
