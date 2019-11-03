@@ -77,15 +77,21 @@ const GameProvider = ({children})=>{
         
     // }
 
+    /*
+        ToDo:
+            If both items are empty, do nothing
+            If the items are different, swap the items
+            If the same item is clicked twice, deselect the item
+    */
     const mergeItems = itemIdentifier => {
         const [rowId, itemId] = itemIdentifier;
         const itemIndex = gridItems[rowId][itemId];
         const itemName = items[itemIndex];
 
+        //if there is no current sourceItem
+        //get item location on grid and item level
+        //set source item to the item which was clicked
         if(selectedItem.itemName === null){
-            //if there is no current sourceItem
-            //get item location on grid and item level
-            //set source item to the item which was clicked
             return setSelectedItem(
                 {
                     gridId: [[rowId],[itemId]],
@@ -103,8 +109,10 @@ const GameProvider = ({children})=>{
             const [sourceIndex, sourceElement] = selectedItem.gridId;
             let prevGridItems = gridItems;
 
-            //check to see if both selected items are the same
-            if(selectedItem.itemName === itemName){
+
+            //check to see if both selected items are the same type
+            if(((selectedItem.itemName === itemName) && itemName !== 'Empty')){
+                console.log('itemName === Empty: ', itemName === 'Empty');
                 console.log('Source item name: ', selectedItem.itemName);
                 console.log('Current item name: ', itemName);
                 //advance the target item to the next item level
