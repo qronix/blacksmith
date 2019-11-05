@@ -7,12 +7,12 @@ const ITEMS = [
     {
         itemName:'Sword',
         moneyPerSecond:10,
-        img:'./assets/sword.jpg'
+        img:'/imgs/sword.jpg'
     },
     {
         itemName:'Hatchet',
         moneyPerSecond:20,
-        img:'./assets/hatchet.jpg'
+        img:'/imgs/hatchet.png'
     },
 ];
 

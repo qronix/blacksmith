@@ -4,21 +4,18 @@ import ItemContainer from '../item-container/item-container.component';
 
 import './item-grid-row.styles.scss';
 
-const ItemGridRow = ({items, rowId, handleItemClick})=> {
-    const getItems = ()=>{
-        // let 
-    }
-
-    const handleClick = (rowItemId)=>{
-        handleItemClick([rowId, rowItemId]);
-    }
+const ItemGridRow = ({rowId, handleItemClick})=> {
+   
+    // const handleClick = (rowItemId)=>{
+    //     handleItemClick([rowId, rowItemId]);
+    // }
     
     return(
         <div className='item-grid-row'>
-            <ItemContainer rowItemId={0} handleClick={handleClick}/>
-            <ItemContainer rowItemId={1} handleClick={handleClick}/>
-            <ItemContainer rowItemId={2} handleClick={handleClick}/>
-            <ItemContainer rowItemId={3} handleClick={handleClick}/>
+            <ItemContainer rowItemId={0} rowId={rowId} />
+            <ItemContainer rowItemId={1} rowId={rowId} />
+            <ItemContainer rowItemId={2} rowId={rowId} />
+            <ItemContainer rowItemId={3} rowId={rowId} />
         </div>
     );
 }

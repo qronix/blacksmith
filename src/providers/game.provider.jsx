@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useState, useEffect, useCallback} from 'react';
 
 import ITEMS from '../items';
 
@@ -9,19 +9,19 @@ export const GameContext = createContext({
     selectedItem:{},
     currentForgeProgress:0,
     mergeItems:()=>{},
-    // selectItem:()=>{},
-    forgeItem:()=>{}
+    forgeItem:()=>{},
+    getItemInfo:()=>{}
 });
 
 const GameProvider = ({children})=>{
-    const [gridItems, setGridItems] = [
+    const [gridItems, setGridItems] = useState([
         [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
-    ];
+    ]);
     const [playerData, setPlayerData] = useState({
         money:0,
         moneyPerSecond:0,
@@ -33,21 +33,37 @@ const GameProvider = ({children})=>{
     });
     const[currentForgeProgress, setCurrentForgeProgress] = useState(0);
     
-    const addForgedItem = ()=> {
+    //get the item info for an item container
+    //by providing the rowId and rowItemId
+    //this will get the item index from the
+    //gridItems array by using the row and rowItem Ids
+    //as coordinates for the multidimensional array
+    const getItemInfo = (rowId, rowItemId)=>{
+        const itemId = gridItems[rowId][rowItemId];
+        const itemData = items[itemId];
+        return itemData;
+    }
+
+    const addForgedItem = useCallback(()=> {
         //when the forge is done creating a new item
         //loop through the grid to find a blank space
         //add a new item to that spot and stop execution
+        // console.log('Adding forged item!');
         for(let i=0; i<gridItems.length; i++){
             for(let j=0; j<4; j++){
                 if(gridItems[i][j]===0){
+                    // let prevGrid = gridItems;
                     setGridItems((prevGridItems)=>{
                         prevGridItems[i][j] = 1;
+                        return prevGridItems;
                     });
                     return setCurrentForgeProgress(0);
                 }
             }
         }
-    }
+        // console.log('Grid items: ', gridItems);
+    },[gridItems]);
+
     const forgeItem = () => {
         if(currentForgeProgress<100){
             setCurrentForgeProgress((prevProgress)=>{
@@ -57,17 +73,19 @@ const GameProvider = ({children})=>{
             addForgedItem();
         }
     }
-    const runForge = ()=> {
-        const id = setTimeout(()=>{
+
+    const runForge = useCallback(()=> {
+        // console.log('Starting the mighty forge!');
+        const id = setInterval(()=>{
             if(currentForgeProgress<100){
-                setCurrentForgeProgress((prevProgress)=>{
-                    prevProgress += 1;
-                });
+                setCurrentForgeProgress(prevProgress=> prevProgress += 1);
             }else{
                 addForgedItem();
             }
-        },100);
-    }
+            // console.log('Forge progress: ', currentForgeProgress);
+        },10);
+        return(id);
+    },[currentForgeProgress, addForgedItem]);
 
     // const selectItem = (itemIdentifier) => {
     //     const [rowId, itemId] = itemIdentifier;
@@ -86,12 +104,16 @@ const GameProvider = ({children})=>{
     const mergeItems = itemIdentifier => {
         const [rowId, itemId] = itemIdentifier;
         const itemIndex = gridItems[rowId][itemId];
-        const itemName = items[itemIndex];
+        const {itemName} = items[itemIndex];
 
         //if there is no current sourceItem
         //get item location on grid and item level
         //set source item to the item which was clicked
         if(selectedItem.itemName === null){
+            console.log('ItemIndex: ', itemIndex);
+            console.log('GridId: ', [[rowId],[itemId]]);
+            console.log('ItemName: ', itemName);
+            console.log('GridItems:', gridItems);
             return setSelectedItem(
                 {
                     gridId: [[rowId],[itemId]],
@@ -109,8 +131,20 @@ const GameProvider = ({children})=>{
             const [sourceIndex, sourceElement] = selectedItem.gridId;
             let prevGridItems = gridItems;
 
-
-            //check to see if both selected items are the same type
+            //check if current item and previous item are the same slot
+            // console.log('Source index: ', sourceIndex);
+            // console.log('Source element: ', sourceElement);
+            // console.log('Row Id: ', rowId);
+            // console.log('itemId: ', itemId);
+            if((sourceIndex[0] === rowId) && (sourceElement[0] === itemId)){
+                //add functionality to deselect item
+                setSelectedItem({
+                    gridId: [],
+                    itemName: null
+                });
+               return console.log('This is the same item space.');
+            }
+            //check if both selected items are the same type
             if(((selectedItem.itemName === itemName) && itemName !== 'Empty')){
                 console.log('itemName === Empty: ', itemName === 'Empty');
                 console.log('Source item name: ', selectedItem.itemName);
@@ -122,11 +156,11 @@ const GameProvider = ({children})=>{
             }
             //if no item is in this spot
             //swap the items
-            else if(itemName === 'Empty'){
+            else if(itemName === 'Empty' && selectedItem.itemName !== 'Empty'){
                 [prevGridItems[sourceIndex][sourceElement], prevGridItems[rowId][itemId]] = [prevGridItems[rowId][itemId],prevGridItems[sourceIndex][sourceElement]];
-            }
+            } 
             else{
-                console.log('These items are not the same and cannot be merged');
+                console.log('These items are not the same OR both spaces are empty');
             }
             setSelectedItem({
                 gridId: [],
@@ -138,8 +172,9 @@ const GameProvider = ({children})=>{
     }
 
     useEffect(()=>{
-        runForge();
-    },[]);
+        const id = runForge();
+        return ()=> clearInterval(id);
+    },[runForge]);
 
     return(
         <GameContext.Provider
@@ -151,9 +186,12 @@ const GameProvider = ({children})=>{
                 currentForgeProgress,
                 mergeItems,
                 forgeItem,
+                getItemInfo
             }}
         >
             {children}
         </GameContext.Provider>
-    )
+    );
 }
+
+export default GameProvider;
