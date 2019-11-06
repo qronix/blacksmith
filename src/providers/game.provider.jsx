@@ -44,6 +44,18 @@ const GameProvider = ({children})=>{
         return itemData;
     }
 
+    const updateMoneyPerSecond = useCallback(() =>{
+        // console.log('Items: ', items);
+        // console.log('GridItems: ', gridItems);
+        let moneyPerSecond = gridItems.flat().reduce((acc, current)=>{
+            // console.log('Current item: ', current);
+            return acc += items[current].moneyPerSecond
+        }, 0);
+        setPlayerData(prevPlayerData=>{
+            return {...prevPlayerData, moneyPerSecond}
+        });
+    },[gridItems,items]);
+
     const addForgedItem = useCallback(()=> {
         //when the forge is done creating a new item
         //loop through the grid to find a blank space
@@ -55,14 +67,27 @@ const GameProvider = ({children})=>{
                     // let prevGrid = gridItems;
                     setGridItems((prevGridItems)=>{
                         prevGridItems[i][j] = 1;
-                        return prevGridItems;
+                        return [...prevGridItems];
                     });
+                    
                     return setCurrentForgeProgress(0);
                 }
             }
         }
         // console.log('Grid items: ', gridItems);
     },[gridItems]);
+
+    
+    const updateMoney = ()=> {
+        console.log('Updating dat money!');
+        const id = setInterval(()=>{
+            setPlayerData(prevPlayerData=>{
+                const {money, moneyPerSecond} = prevPlayerData;
+                return {...prevPlayerData, money:money+moneyPerSecond}
+            });
+        },1000);
+        return id;
+    };
 
     const forgeItem = () => {
         if(currentForgeProgress<100){
@@ -166,15 +191,31 @@ const GameProvider = ({children})=>{
                 gridId: [],
                 itemName: null
             });
-            setGridItems(prevGridItems);
+            setGridItems([...prevGridItems]);
         }
         console.dir(gridItems);
     }
 
+    
+
     useEffect(()=>{
         const id = runForge();
-        return ()=> clearInterval(id);
-    },[runForge]);
+        return ()=> {
+            clearInterval(id);
+        };
+    });
+
+    useEffect(()=>{
+        const id = updateMoney();
+        return(()=>{
+            clearInterval(id);
+        });
+    },[]);
+
+    useEffect(()=>{
+        // console.log('Updating money');
+        updateMoneyPerSecond();
+    },[gridItems]);
 
     return(
         <GameContext.Provider

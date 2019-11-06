@@ -11,7 +11,7 @@ const ITEMS = [
     },
     {
         itemName:'Hatchet',
-        moneyPerSecond:20,
+        moneyPerSecond:40,
         img:'/imgs/hatchet.png'
     },
 ];
