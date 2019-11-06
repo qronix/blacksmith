@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
+import {GameContext} from '../../providers/game.provider';
 
 import './forge-button.styles.scss';
 
 const ForgeButton = () => {
-    return(
-        <div className='forge-button'>
+    const {forgeItem} = useContext(GameContext);
 
-        </div>
+    return(
+        <div className='forge-button' onClick={forgeItem}/>
     );
 }
 

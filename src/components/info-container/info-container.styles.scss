@@ -2,8 +2,41 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 8vh;
+    height: 10vh;
     // border: 1px solid red;
     color:white;
     text-align: center;
+
+    &-money{
+        display: flex;
+        justify-content: space-around;
+        width: 30%;
+        margin: 0 auto;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        // border:1px solid blue;
+        background-color: rgba(94, 47, 9, 0.699);
+        border:3px solid rgba(68, 33, 4, 0.973);
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    &-coin-money{
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    &-mps{
+        display:flex;
+        justify-content: space-between;
+        width: 38%;
+        margin:0 auto;
+        align-items: center;
+
+    }
+    &-coin-mps{
+        width: 14px;
+        height: 14px;
+    }
 }

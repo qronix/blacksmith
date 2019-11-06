@@ -14,9 +14,15 @@ const InfoContainer = ()=> {
     return(
         <div className='info-container'>
             {/* money */}
-            <CustomText text={money}/>
+            <div className='info-container-money'>
+                <img src='/imgs/coin.png' alt='coin' className='info-container-coin-money'/>
+                <CustomText text={money}/>
+            </div>
             {/* money per second */}
-            <CustomText text={`${moneyPerSecond} / second`}/>
+            <div className='info-container-mps'>
+                <img src='/imgs/coin.png' alt='coin' className='info-container-coin-mps'/>
+                <CustomText text={`${moneyPerSecond} / second`}/>
+            </div>
             <ProgressBar/>
         </div>
     );

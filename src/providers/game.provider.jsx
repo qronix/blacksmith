@@ -1,6 +1,7 @@
 import React, {createContext, useState, useEffect, useCallback} from 'react';
 
-import ITEMS from '../items';
+// import ITEMS from '../items';
+import ITEMS from '../item-data';
 
 export const GameContext = createContext({
     gridItems: [],
@@ -80,6 +81,7 @@ const GameProvider = ({children})=>{
     
     const updateMoney = ()=> {
         console.log('Updating dat money!');
+        // console.log('Items: ', items);
         const id = setInterval(()=>{
             setPlayerData(prevPlayerData=>{
                 const {money, moneyPerSecond} = prevPlayerData;
@@ -92,7 +94,7 @@ const GameProvider = ({children})=>{
     const forgeItem = () => {
         if(currentForgeProgress<100){
             setCurrentForgeProgress((prevProgress)=>{
-                prevProgress += 1;
+                return prevProgress += 20;
             });
         }else{
             addForgedItem();
@@ -108,7 +110,7 @@ const GameProvider = ({children})=>{
                 addForgedItem();
             }
             // console.log('Forge progress: ', currentForgeProgress);
-        },10);
+        },50);
         return(id);
     },[currentForgeProgress, addForgedItem]);
 
@@ -195,8 +197,6 @@ const GameProvider = ({children})=>{
         }
         console.dir(gridItems);
     }
-
-    
 
     useEffect(()=>{
         const id = runForge();
