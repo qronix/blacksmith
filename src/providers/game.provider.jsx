@@ -16,12 +16,12 @@ export const GameContext = createContext({
 
 const GameProvider = ({children})=>{
     const [gridItems, setGridItems] = useState([
-        [12,12,12,12,],
-        [12,12,12,12,],
-        [12,12,12,12,],
-        [12,12,12,12,],
-        [12,12,12,12,],
-        [12,12,12,12,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
     ]);
     const [playerData, setPlayerData] = useState({
         money:0,
@@ -46,13 +46,7 @@ const GameProvider = ({children})=>{
     }
 
     const updateMoneyPerSecond = useCallback(() =>{
-        // console.log('Items: ', items);
-        // console.log('GridItems: ', gridItems);
-        let moneyPerSecond = gridItems.flat().reduce((acc, current)=>{
-            if(items[current].itemName !== 'Empty')
-            console.log('Current item: ', items[current]);
-            return acc += items[current].moneyPerSecond
-        }, 0);
+        let moneyPerSecond = gridItems.flat().reduce((acc, current)=> acc += items[current].moneyPerSecond, 0);
         setPlayerData(prevPlayerData=>{
             return {...prevPlayerData, moneyPerSecond}
         });
@@ -68,7 +62,7 @@ const GameProvider = ({children})=>{
                 if(gridItems[i][j]===0){
                     // let prevGrid = gridItems;
                     setGridItems((prevGridItems)=>{
-                        prevGridItems[i][j] = 100;
+                        prevGridItems[i][j] = 1;
                         return [...prevGridItems];
                     });
                     
