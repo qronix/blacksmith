@@ -138,7 +138,7 @@ const GameProvider = ({children})=>{
             console.log('GridItems:', gridItems);
             return setSelectedItem(
                 {
-                    gridId: [[rowId],[itemId]],
+                    gridId: [rowId,itemId],
                     itemName
                 }
             );
