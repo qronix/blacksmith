@@ -16,12 +16,12 @@ export const GameContext = createContext({
 
 const GameProvider = ({children})=>{
     const [gridItems, setGridItems] = useState([
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
+        [12,12,12,12,],
+        [12,12,12,12,],
+        [12,12,12,12,],
+        [12,12,12,12,],
+        [12,12,12,12,],
+        [12,12,12,12,],
     ]);
     const [playerData, setPlayerData] = useState({
         money:0,
@@ -49,7 +49,8 @@ const GameProvider = ({children})=>{
         // console.log('Items: ', items);
         // console.log('GridItems: ', gridItems);
         let moneyPerSecond = gridItems.flat().reduce((acc, current)=>{
-            // console.log('Current item: ', current);
+            if(items[current].itemName !== 'Empty')
+            console.log('Current item: ', items[current]);
             return acc += items[current].moneyPerSecond
         }, 0);
         setPlayerData(prevPlayerData=>{
@@ -67,7 +68,7 @@ const GameProvider = ({children})=>{
                 if(gridItems[i][j]===0){
                     // let prevGrid = gridItems;
                     setGridItems((prevGridItems)=>{
-                        prevGridItems[i][j] = 1;
+                        prevGridItems[i][j] = 100;
                         return [...prevGridItems];
                     });
                     

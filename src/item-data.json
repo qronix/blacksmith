@@ -7,122 +7,122 @@
     {
         "itemName": "Wolf Arrows",
         "moneyPerSecond": 12,
-        "img": "/imgs/am_t_01.png"
+        "img": "/imgs/ar_t_01.png"
     },
     {
         "itemName": "Venom Arrow",
         "moneyPerSecond": 15,
-        "img": "/imgs/ar_t_01.png"
+        "img": "/imgs/ar_t_02.png"
     },
     {
         "itemName": "Grenade",
         "moneyPerSecond": 18,
-        "img": "/imgs/ar_t_02.png"
+        "img": "/imgs/ar_t_03.png"
     },
     {
         "itemName": "Steady Arrow",
         "moneyPerSecond": 22,
-        "img": "/imgs/t_f_04.png"
+        "img": "/imgs/ar_t_04.png"
     },
     {
         "itemName": "Hatchet",
         "moneyPerSecond": 27,
-        "img": "/imgs/axe_t_01.png"
+        "img": "/imgs/axe_01.png"
     },
     {
         "itemName": "Bone Edge",
         "moneyPerSecond": 33,
-        "img": "/imgs/axe_t_02.png"
+        "img": "/imgs/axe_02.png"
     },
     {
         "itemName": "Stone Slicer",
         "moneyPerSecond": 41,
-        "img": "/imgs/axe_t_03.png"
+        "img": "/imgs/axe_03.png"
     },
     {
         "itemName": "Halbard",
         "moneyPerSecond": 51,
-        "img": "/imgs/axe_t_04.png"
+        "img": "/imgs/axe_04.png"
     },
     {
         "itemName": "Hate's Hand",
         "moneyPerSecond": 63,
-        "img": "/imgs/axe_t_05.png"
+        "img": "/imgs/axe_05.png"
     },
     {
         "itemName": "Steel Axe",
         "moneyPerSecond": 78,
-        "img": "/imgs/axe_t_06.png"
+        "img": "/imgs/axe_06.png"
     },
     {
         "itemName": "Simple Hatchet",
         "moneyPerSecond": 97,
-        "img": "/imgs/axe_t_07.png"
+        "img": "/imgs/axe_07.png"
     },
     {
         "itemName": "Volcano Axe",
         "moneyPerSecond": 121,
-        "img": "/imgs/axe_t_08.PNG"
+        "img": "/imgs/axe_08.png"
     },
     {
         "itemName": "Heavy Hitter",
         "moneyPerSecond": 151,
-        "img": "/imgs/axe_t_09.png"
+        "img": "/imgs/axe_09.png"
     },
     {
         "itemName": "Basic Axe",
         "moneyPerSecond": 188,
-        "img": "/imgs/axe_t_10.png"
+        "img": "/imgs/axe_10.png"
     },
     {
         "itemName": "Basic Pick",
         "moneyPerSecond": 235,
-        "img": "/imgs/axe_t_11.PNG"
+        "img": "/imgs/axe_11.png"
     },
     {
         "itemName": "Cleaver",
         "moneyPerSecond": 293,
-        "img": "/imgs/axe_t_12.PNG"
+        "img": "/imgs/axe_12.png"
     },
     {
         "itemName": "Rune Axe",
         "moneyPerSecond": 366,
-        "img": "/imgs/axe_t_13.PNG"
+        "img": "/imgs/axe_13.PNG"
     },
     {
         "itemName": "Throwing Axe",
         "moneyPerSecond": 457,
-        "img": "/imgs/a_n_t_01.png"
+        "img": "/imgs/axe_14.png"
     },
     {
         "itemName": "Mystic Axe",
         "moneyPerSecond": 571,
-        "img": "/imgs/a_n_t_02.png"
+        "img": "/imgs/axe_15.png"
     },
     {
         "itemName": "Bat Wing Axe",
         "moneyPerSecond": 713,
-        "img": "/imgs/a_n_t_03.png"
+        "img": "/imgs/axe_16.PNG"
     },
     {
         "itemName": "Stone Hatchet",
         "moneyPerSecond": 891,
-        "img": "/imgs/a_n_t_04.png"
+        "img": "/imgs/axe_17.PNG"
     },
     {
         "itemName": "Warrior's Axe",
         "moneyPerSecond": 1113,
-        "img": "/imgs/a_n_t_05.png"
+        "img": "/imgs/axe_18.PNG"
     },
     {
         "itemName": "Hunter's Axe",
         "moneyPerSecond": 1391,
-        "img": "/imgs/t_f_01.png"
+        "img": "/imgs/axe_19.png"
     },
     {
         "itemName": "Emerald Throwing Axe",
         "moneyPerSecond": 1738,
-        "img": "/imgs/t_f_02.png"
+        "img": "/imgs/axe_20.png"
     },
     {
         "itemName": "Simple Bow",
@@ -272,92 +272,92 @@
     {
         "itemName": "Simple Dagger",
         "moneyPerSecond": 1402801,
-        "img": "/imgs/kn_t_01.png"
+        "img": "/imgs/dag_01.png"
     },
     {
         "itemName": "Spleen Tickler",
         "moneyPerSecond": 1753501,
-        "img": "/imgs/kn_t_02.png"
+        "img": "/imgs/dag_02.png"
     },
     {
         "itemName": "Gut Slicer",
         "moneyPerSecond": 2191876,
-        "img": "/imgs/kn_t_03.png"
+        "img": "/imgs/dag_03.png"
     },
     {
         "itemName": "Simple Shiv",
         "moneyPerSecond": 2739845,
-        "img": "/imgs/kn_t_04.png"
+        "img": "/imgs/dag_04.png"
     },
     {
         "itemName": "Bone Slicer",
         "moneyPerSecond": 3424806,
-        "img": "/imgs/kn_t_05.png"
+        "img": "/imgs/dag_05.png"
     },
     {
         "itemName": "Bat Dagger",
         "moneyPerSecond": 4281007,
-        "img": "/imgs/kn_t_06.png"
+        "img": "/imgs/dag_06.png"
     },
     {
         "itemName": "Fat Dagger",
         "moneyPerSecond": 5351258,
-        "img": "/imgs/kn_t_07.png"
+        "img": "/imgs/dag_07.png"
     },
     {
         "itemName": "Basic Dagger",
         "moneyPerSecond": 6689072,
-        "img": "/imgs/kn_t_08.png"
+        "img": "/imgs/dag_08.png"
     },
     {
         "itemName": "Throwing Knife",
         "moneyPerSecond": 8361340,
-        "img": "/imgs/kn_t_09.PNG"
+        "img": "/imgs/dag_09.png"
     },
     {
         "itemName": "Crescent Moon",
         "moneyPerSecond": 10451675,
-        "img": "/imgs/kn_t_10.PNG"
+        "img": "/imgs/dag_10.png"
     },
     {
         "itemName": "Catholic Needle",
         "moneyPerSecond": 13064593,
-        "img": "/imgs/kn_t_11.PNG"
+        "img": "/imgs/dag_11.png"
     },
     {
         "itemName": "Impractical Dagger",
         "moneyPerSecond": 16330741,
-        "img": "/imgs/k_nt_01.png"
+        "img": "/imgs/dag_12.png"
     },
     {
         "itemName": "Rough Tide",
         "moneyPerSecond": 20413426,
-        "img": "/imgs/k_nt_02.png"
+        "img": "/imgs/dag_13.png"
     },
     {
         "itemName": "Jungle Dagger",
         "moneyPerSecond": 25516782,
-        "img": "/imgs/k_nt_03.png"
+        "img": "/imgs/dag_14.png"
     },
     {
         "itemName": "Steel Dagger",
         "moneyPerSecond": 31895977,
-        "img": "/imgs/k_nt_04.png"
+        "img": "/imgs/dag_15.PNG"
     },
     {
         "itemName": "Kidney Carver",
         "moneyPerSecond": 39869971,
-        "img": "/imgs/k_nt_05.png"
+        "img": "/imgs/dag_16.PNG"
     },
     {
         "itemName": "Bronze Dagger",
         "moneyPerSecond": 49837463,
-        "img": "/imgs/k_nt_06.png"
+        "img": "/imgs/dag_17.PNG"
     },
     {
         "itemName": "Knight's Knife",
         "moneyPerSecond": 62296828,
-        "img": "/imgs/t_f_03.png"
+        "img": "/imgs/dag_18.png"
     },
     {
         "itemName": "Basic Shotgun",
@@ -402,67 +402,67 @@
     {
         "itemName": "Stone Hammer",
         "moneyPerSecond": 464147527,
-        "img": "/imgs/hmmr_f_t_01.png"
+        "img": "/imgs/hm_t_01.png"
     },
     {
         "itemName": "Blunt Hammer",
         "moneyPerSecond": 580184408,
-        "img": "/imgs/hm_t_01.png"
+        "img": "/imgs/hm_t_02.png"
     },
     {
         "itemName": "Purple Mallet",
         "moneyPerSecond": 725230510,
-        "img": "/imgs/hm_t_02.png"
+        "img": "/imgs/hm_t_03.png"
     },
     {
         "itemName": "Crude Hammer",
         "moneyPerSecond": 906538137,
-        "img": "/imgs/hm_t_03.png"
+        "img": "/imgs/hm_t_04.png"
     },
     {
         "itemName": "Gilded Whacker",
         "moneyPerSecond": 1133172671,
-        "img": "/imgs/hm_t_04.png"
+        "img": "/imgs/hm_t_05.PNG"
     },
     {
         "itemName": "Stone Whacker",
         "moneyPerSecond": 1416465838,
-        "img": "/imgs/hm_t_05.PNG"
+        "img": "/imgs/hm_t_06.png"
     },
     {
         "itemName": "Precise Death",
         "moneyPerSecond": 1770582297,
-        "img": "/imgs/hm_t_06.png"
+        "img": "/imgs/hm_t_07.png"
     },
     {
         "itemName": "Brick Hammer",
         "moneyPerSecond": 2213227871,
-        "img": "/imgs/hm_t_07.png"
+        "img": "/imgs/hm_t_08.png"
     },
     {
         "itemName": "Onyx Hammer",
         "moneyPerSecond": 2766534838,
-        "img": "/imgs/hm_t_08.png"
+        "img": "/imgs/hm_t_09.png"
     },
     {
         "itemName": "Ornate Hammer",
         "moneyPerSecond": 3458168547,
-        "img": "/imgs/hm_t_09.png"
+        "img": "/imgs/hm_t_10.png"
     },
     {
         "itemName": "Heavy Hammer",
         "moneyPerSecond": 4322710683,
-        "img": "/imgs/hm_t_10.png"
+        "img": "/imgs/hm_t_11.PNG"
     },
     {
         "itemName": "Golden Hammer",
         "moneyPerSecond": 5403388353,
-        "img": "/imgs/hm_t_11.PNG"
+        "img": "/imgs/hm_t_12.PNG"
     },
     {
         "itemName": "Wooden Mallet",
         "moneyPerSecond": 6754235441,
-        "img": "/imgs/hm_t_12.PNG"
+        "img": "/imgs/hm_t_13.png"
     },
     {
         "itemName": "Simple Pike",
@@ -512,62 +512,62 @@
     {
         "itemName": "Teak Staff",
         "moneyPerSecond": 62903719395,
-        "img": "/imgs/stf_t_01.png"
+        "img": "/imgs/st_t_01.png"
     },
     {
         "itemName": "Blunt Staff",
         "moneyPerSecond": 78629649243,
-        "img": "/imgs/st_t_01.png"
+        "img": "/imgs/st_t_02.png"
     },
     {
         "itemName": "Ocean's Fury",
         "moneyPerSecond": 98287061553,
-        "img": "/imgs/st_t_02.png"
+        "img": "/imgs/st_t_03.png"
     },
     {
         "itemName": "Wizard's Walker",
         "moneyPerSecond": 122858826941,
-        "img": "/imgs/st_t_03.png"
+        "img": "/imgs/st_t_04.png"
     },
     {
         "itemName": "Jungle's Grasp",
         "moneyPerSecond": 153573533676,
-        "img": "/imgs/st_t_04.png"
+        "img": "/imgs/st_t_05.png"
     },
     {
         "itemName": "Blood Orb Staff",
         "moneyPerSecond": 191966917095,
-        "img": "/imgs/st_t_05.png"
+        "img": "/imgs/st_t_06.png"
     },
     {
         "itemName": "Void Staff",
         "moneyPerSecond": 239958646368,
-        "img": "/imgs/st_t_06.png"
+        "img": "/imgs/st_t_07.png"
     },
     {
         "itemName": "Nature's Birth",
         "moneyPerSecond": 299948307960,
-        "img": "/imgs/st_t_07.png"
+        "img": "/imgs/st_t_08.png"
     },
     {
         "itemName": "Watchful Staff",
         "moneyPerSecond": 374935384950,
-        "img": "/imgs/st_t_08.png"
+        "img": "/imgs/st_t_09.png"
     },
     {
         "itemName": "Shaman's Stick",
         "moneyPerSecond": 468669231187,
-        "img": "/imgs/st_t_09.png"
+        "img": "/imgs/st_t_10.PNG"
     },
     {
         "itemName": "Cardinal's Staff",
         "moneyPerSecond": 585836538983,
-        "img": "/imgs/st_t_10.PNG"
+        "img": "/imgs/st_t_11.PNG"
     },
     {
         "itemName": "Gilded Sword",
         "moneyPerSecond": 732295673728,
-        "img": "/imgs/st_t_11.PNG"
+        "img": "/imgs/st_t_12.png"
     },
     {
         "itemName": "Sparring Sword",
@@ -647,32 +647,32 @@
     {
         "itemName": "Kukri",
         "moneyPerSecond": 26016368569765,
-        "img": "/imgs/swnt_01.png"
+        "img": "/imgs/sv_t_16.png"
     },
     {
         "itemName": "Ancient Sword",
         "moneyPerSecond": 32520460712206,
-        "img": "/imgs/swnt_02.png"
+        "img": "/imgs/sv_t_17.png"
     },
     {
         "itemName": "Light Sword",
         "moneyPerSecond": 40650575890257,
-        "img": "/imgs/swnt_03.png"
+        "img": "/imgs/sv_t_18.png"
     },
     {
         "itemName": "Ornamental Sword",
         "moneyPerSecond": 50813219862821,
-        "img": "/imgs/swnt_04.png"
+        "img": "/imgs/sv_t_19.png"
     },
     {
         "itemName": "Bastard Blade",
         "moneyPerSecond": 63516524828526,
-        "img": "/imgs/swnt_05.png"
+        "img": "/imgs/sv_t_20.png"
     },
     {
         "itemName": "Mine",
         "moneyPerSecond": 79395656035657,
-        "img": "/imgs/swnt_06.png"
+        "img": "/imgs/sv_t_21.png"
     },
     {
         "itemName": "Shuriken",
