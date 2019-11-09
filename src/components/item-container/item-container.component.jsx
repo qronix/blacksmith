@@ -6,14 +6,15 @@ import {compareArrays} from '../../utils/utils';
 import './item-container.styles.scss';
 
 // import sword from '../../assets/sword.jpg';
-const ItemContainer = ({rowItemId, rowId}) => {
+//rowId => x coord, rowItemId => y coord
+const ItemContainer = ({rowId, rowItemId}) => {
 
     const {mergeItems, getItemInfo, selectedItem:{gridId}} = useContext(GameContext);
     const handleClick = ()=> {
         mergeItems([rowId, rowItemId]);
     }
     const myItem = getItemInfo(rowId, rowItemId);
-    const isSelected = compareArrays([rowItemId, rowId],gridId);
+    const isSelected = compareArrays([rowId, rowItemId],gridId);
 
     return(
         (myItem.img !== null) 
