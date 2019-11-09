@@ -15,7 +15,7 @@ export const GameContext = createContext({
 
 const GameProvider = ({children})=>{
     const [gridItems, setGridItems] = useState([
-        [139,139,0,0,],
+        [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
