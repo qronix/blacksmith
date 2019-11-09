@@ -9,16 +9,20 @@ import './item-container.styles.scss';
 //rowId => x coord, rowItemId => y coord
 const ItemContainer = ({rowId, rowItemId}) => {
 
-    const {mergeItems, getItemInfo, selectedItem:{gridId}} = useContext(GameContext);
+    const {mergeItems, getItemInfo, selectedItem:{gridId, itemName}} = useContext(GameContext);
     const handleClick = ()=> {
         mergeItems([rowId, rowItemId]);
     }
     const myItem = getItemInfo(rowId, rowItemId);
     const isSelected = compareArrays([rowId, rowItemId],gridId);
+    let sameAsSelected = null;
+    if(!isSelected){
+        sameAsSelected = (myItem.itemName === itemName);  
+    }
 
     return(
         (myItem.img !== null) 
-            ? <div className={`item-container ${(isSelected) ? 'selected' : null}`} onClick={()=>handleClick()}
+            ? <div className={`item-container ${(isSelected) ? 'selected' : null} ${(sameAsSelected) ? 'mergeable' : null}`} onClick={()=>handleClick()}
                 style={{
                     backgroundImage:`url(${myItem.img})`,
                     backgroundRepeat: 'no-repeat',

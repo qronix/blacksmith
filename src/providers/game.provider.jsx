@@ -50,13 +50,13 @@ const GameProvider = ({children})=>{
         setPlayerData(prevPlayerData=>{
             return {...prevPlayerData, moneyPerSecond}
         });
-    },[gridItems,items]);
+    },[items]);
 
     const addForgedItem = useCallback(()=> {
         //when the forge is done creating a new item
         //loop through the grid to find a blank space
         //add a new item to that spot and stop execution
-        // console.log('Adding forged item!');
+        console.log('Adding forged item!');
         for(let i=0; i<gridItems.length; i++){
             for(let j=0; j<4; j++){
                 if(gridItems[i][j]===0){
@@ -78,6 +78,8 @@ const GameProvider = ({children})=>{
         console.log('Updating dat money!');
         // console.log('Items: ', items);
         const id = setInterval(()=>{
+            console.log('Forge progress (update money): ', currentForgeProgress);
+
             setPlayerData(prevPlayerData=>{
                 const {money, moneyPerSecond} = prevPlayerData;
                 return {...prevPlayerData, money:money+moneyPerSecond}
@@ -87,6 +89,7 @@ const GameProvider = ({children})=>{
     };
 
     const forgeItem = () => {
+        console.log('Adding forged item');
         if(currentForgeProgress<100){
             setCurrentForgeProgress((prevProgress)=>{
                 return prevProgress += 20;
@@ -97,17 +100,18 @@ const GameProvider = ({children})=>{
     }
 
     const runForge = useCallback(()=> {
-        // console.log('Starting the mighty forge!');
+        console.log('Starting the mighty forge!');
         const id = setInterval(()=>{
-            if(currentForgeProgress<100){
-                setCurrentForgeProgress(prevProgress=> prevProgress += 1);
-            }else{
-                addForgedItem();
-            }
-            // console.log('Forge progress: ', currentForgeProgress);
+            setCurrentForgeProgress(prevProgress=>{
+                if(prevProgress<100){
+                    setCurrentForgeProgress(prevProgress+1);
+                }else{
+                    addForgedItem();
+                }
+            });
         },50);
         return(id);
-    },[currentForgeProgress, addForgedItem]);
+    },[addForgedItem]);
 
     // const selectItem = (itemIdentifier) => {
     //     const [rowId, itemId] = itemIdentifier;
@@ -194,11 +198,12 @@ const GameProvider = ({children})=>{
     }
 
     useEffect(()=>{
+        console.log('Running forge!');
         const id = runForge();
         return ()=> {
             clearInterval(id);
         };
-    });
+    },[]);
 
     useEffect(()=>{
         const id = updateMoney();
@@ -210,7 +215,7 @@ const GameProvider = ({children})=>{
     useEffect(()=>{
         // console.log('Updating money');
         updateMoneyPerSecond();
-    },[gridItems]);
+    },[gridItems, updateMoneyPerSecond]);
 
     return(
         <GameContext.Provider
