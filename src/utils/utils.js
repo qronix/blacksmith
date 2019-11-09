@@ -59,7 +59,7 @@ export const formatNumber = (num)=>{
 
     //take number, divide by largest value which does not result in a value less than 1
     //if remaining value is less that 1000 and greater than or equal to 1, 
-    //take that value, trun to x.xx and append the denominator
+    //take that value, trun to X and append the denominator
     
     //if the number provided is less than the minimum value we are formatting
     //return the number without formatting

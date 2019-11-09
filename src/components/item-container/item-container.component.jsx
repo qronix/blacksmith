@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 
 import { GameContext } from '../../providers/game.provider';
-import {compareArrays} from '../../utils/utils';
+import {compareArrays, formatNumber} from '../../utils/utils';
 
 import './item-container.styles.scss';
 
@@ -29,7 +29,12 @@ const ItemContainer = ({rowId, rowItemId}) => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
-            /> 
+                >
+                    <div className='item-container-revenue'>
+                        <img src='/imgs/coin.png' alt='coin' className='item-container-revenue-coin'/>
+                        <span className='item-container-revenue-value'>{formatNumber(myItem.moneyPerSecond)}</span>
+                    </div>
+                </div> 
             : 
             <div className={`item-container ${(isSelected) ? 'selected' : null}`} onClick={()=>handleClick()}/>
             
