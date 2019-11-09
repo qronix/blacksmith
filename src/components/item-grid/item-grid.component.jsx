@@ -1,16 +1,15 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import uuid from 'uuid';
 // import DragDropContext from 'react-dnd';
 // import HTML5Backend from 'react-dnd-html5-backend';
 
-import {GameContext} from '../../providers/game.provider';
 import ItemGridRow from '../item-grid-row/item-grid-row.component';
 
 import './item-grid.styles.scss';
 
-const ItemGrid = ({gridItems}) => {
+const ItemGrid = ({gridItems, mergeItems}) => {
     // console.log('Grid items: ', gridItems);
-    const {mergeItems} = useContext(GameContext);
+    // const {mergeItems} = useContext(GameContext);
     const buildGrid = useMemo(()=>{
         // console.log('Grid items: ', gridItems);
         const gridRows = [];

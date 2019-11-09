@@ -1,6 +1,5 @@
 import React, {createContext, useState, useEffect, useCallback} from 'react';
 
-// import ITEMS from '../items';
 import ITEMS from '../item-data';
 
 export const GameContext = createContext({
@@ -16,7 +15,7 @@ export const GameContext = createContext({
 
 const GameProvider = ({children})=>{
     const [gridItems, setGridItems] = useState([
-        [0,0,0,0,],
+        [139,139,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
         [0,0,0,0,],
@@ -52,21 +51,30 @@ const GameProvider = ({children})=>{
         });
     },[items]);
 
+
+    const gridHasSpace = ()=> {
+        let hasSpace = gridItems.flat().some(item=>item===0);
+        return hasSpace;
+    }
+
     const addForgedItem = useCallback(()=> {
         //when the forge is done creating a new item
         //loop through the grid to find a blank space
         //add a new item to that spot and stop execution
-        console.log('Adding forged item!');
-        for(let i=0; i<gridItems.length; i++){
-            for(let j=0; j<4; j++){
-                if(gridItems[i][j]===0){
-                    // let prevGrid = gridItems;
-                    setGridItems((prevGridItems)=>{
-                        prevGridItems[i][j] = 1;
-                        return [...prevGridItems];
-                    });
-                    
-                    return setCurrentForgeProgress(0);
+        //check if there is space in the grid for a new item
+        const spaceInGrid = gridHasSpace();
+        if(spaceInGrid){
+            console.log('Adding item to grid');
+            for(let i=0; i<gridItems.length; i++){
+                for(let j=0; j<4; j++){
+                    if(gridItems[i][j]===0){
+                        // let prevGrid = gridItems;
+                        setGridItems((prevGridItems)=>{
+                            prevGridItems[i][j] = 1;
+                            return [...prevGridItems];
+                        });
+                        return setCurrentForgeProgress(0);
+                    }
                 }
             }
         }
@@ -75,11 +83,7 @@ const GameProvider = ({children})=>{
 
     
     const updateMoney = ()=> {
-        console.log('Updating dat money!');
-        // console.log('Items: ', items);
         const id = setInterval(()=>{
-            console.log('Forge progress (update money): ', currentForgeProgress);
-
             setPlayerData(prevPlayerData=>{
                 const {money, moneyPerSecond} = prevPlayerData;
                 return {...prevPlayerData, money:money+moneyPerSecond}
@@ -89,7 +93,6 @@ const GameProvider = ({children})=>{
     };
 
     const forgeItem = () => {
-        console.log('Adding forged item');
         if(currentForgeProgress<100){
             setCurrentForgeProgress((prevProgress)=>{
                 return prevProgress += 20;
@@ -100,7 +103,6 @@ const GameProvider = ({children})=>{
     }
 
     const runForge = useCallback(()=> {
-        console.log('Starting the mighty forge!');
         const id = setInterval(()=>{
             setCurrentForgeProgress(prevProgress=>{
                 if(prevProgress<100){
@@ -131,7 +133,9 @@ const GameProvider = ({children})=>{
         const [rowId, itemId] = itemIdentifier;
         const itemIndex = gridItems[rowId][itemId];
         const {itemName} = items[itemIndex];
-
+        if(itemIndex === (items.length-1)){
+            return console.log('This is a max level item and cannot be merged');
+        }
         //if there is no current sourceItem
         //get item location on grid and item level
         //set source item to the item which was clicked
@@ -158,11 +162,11 @@ const GameProvider = ({children})=>{
             let prevGridItems = gridItems;
 
             //check if current item and previous item are the same slot
-            // console.log('Source index: ', sourceIndex);
-            // console.log('Source element: ', sourceElement);
-            // console.log('Row Id: ', rowId);
-            // console.log('itemId: ', itemId);
-            if((sourceIndex[0] === rowId) && (sourceElement[0] === itemId)){
+            console.log('Source index: ', sourceIndex);
+            console.log('Source element: ', sourceElement);
+            console.log('Row Id: ', rowId);
+            console.log('itemId: ', itemId);
+            if((sourceIndex === rowId) && (sourceElement === itemId)){
                 //add functionality to deselect item
                 setSelectedItem({
                     gridId: [],

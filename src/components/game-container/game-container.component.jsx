@@ -8,13 +8,13 @@ import {GameContext} from '../../providers/game.provider';
 import './game-container.styles.scss';
 
 const GameContainer = () => {
-    const {gridItems} = useContext(GameContext);
+    const {gridItems, mergeItems} = useContext(GameContext);
 
     return(
         <div className='game-container'>
             <div className='game-container-background'/>
             <InfoContainer/>
-            <ItemGrid gridItems={gridItems}/>
+            <ItemGrid gridItems={gridItems} mergeItems={mergeItems}/>
             <ForgeButton/>
         </div>
     );
