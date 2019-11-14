@@ -1,0 +1,39 @@
+$width: 23vw;
+$height: 4vh;
+$width-large:40vw;
+$height-large:6vh;
+
+
+.custom-button{
+    width: $width;
+    height: $height;
+    text-align: center;
+    &-large{
+        width:$width-large;
+        height: $height-large;
+        transition: all 0.1s;
+        &:active{
+            transform: scale(0.8);
+        }
+    }
+    transition: all 0.1s;
+    &:active{
+        transform: scale(0.8);
+    }
+}
+.custom-button-img{
+    width:$width;
+    height: $height;
+
+    &-large{
+        width:$width-large;
+        height: $height-large;
+    }
+}
+.custom-button-text{
+    position: relative;
+    color:white;
+    letter-spacing: 0.5px;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
+    top:-3.8vh;
+}
