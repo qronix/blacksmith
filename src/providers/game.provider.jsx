@@ -8,9 +8,11 @@ export const GameContext = createContext({
     items: [],
     selectedItem:{},
     currentForgeProgress:0,
+    upgradesShown:null,
     mergeItems:()=>{},
     forgeItem:()=>{},
-    getItemInfo:()=>{}
+    getItemInfo:()=>{},
+    toggleUpgrades: ()=>{}
 });
 
 const GameProvider = ({children})=>{
@@ -26,6 +28,7 @@ const GameProvider = ({children})=>{
         money:0,
         moneyPerSecond:0,
     });
+    const [upgradesShown, setUpgradesShown] = useState(false);
     const [items, setItems] = useState(ITEMS);
     const [selectedItem, setSelectedItem] = useState({
         gridId:[],
@@ -33,6 +36,11 @@ const GameProvider = ({children})=>{
     });
     const[currentForgeProgress, setCurrentForgeProgress] = useState(0);
     
+    //toggle the upgrade window between open and closed
+    const toggleUpgrades = ()=>{
+        setUpgradesShown((prevUpgradesShown)=>!prevUpgradesShown);
+    }
+
     //get the item info for an item container
     //by providing the rowId and rowItemId
     //this will get the item index from the
@@ -78,7 +86,6 @@ const GameProvider = ({children})=>{
                 }
             }
         }
-        // console.log('Grid items: ', gridItems);
     },[gridItems]);
 
     
@@ -115,20 +122,6 @@ const GameProvider = ({children})=>{
         return(id);
     },[addForgedItem]);
 
-    // const selectItem = (itemIdentifier) => {
-    //     const [rowId, itemId] = itemIdentifier;
-    //     const itemIndex = gridItems[rowId][itemId];
-    //     const itemName = items[itemIndex];
-
-        
-    // }
-
-    /*
-        ToDo:
-            If both items are empty, do nothing
-            If the items are different, swap the items
-            If the same item is clicked twice, deselect the item
-    */
     const mergeItems = itemIdentifier => {
         const [rowId, itemId] = itemIdentifier;
         const itemIndex = gridItems[rowId][itemId];
@@ -217,7 +210,6 @@ const GameProvider = ({children})=>{
     },[]);
 
     useEffect(()=>{
-        // console.log('Updating money');
         updateMoneyPerSecond();
     },[gridItems, updateMoneyPerSecond]);
 
@@ -229,9 +221,11 @@ const GameProvider = ({children})=>{
                 items,
                 selectedItem,
                 currentForgeProgress,
+                upgradesShown,
                 mergeItems,
                 forgeItem,
-                getItemInfo
+                getItemInfo,
+                toggleUpgrades,
             }}
         >
             {children}

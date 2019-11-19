@@ -11,7 +11,7 @@ $height-large:6vh;
     &-large{
         width:$width-large;
         height: $height-large;
-        transition: all 0.1s;
+        transition: all 30ms;
         &:active{
             transform: scale(0.8);
         }

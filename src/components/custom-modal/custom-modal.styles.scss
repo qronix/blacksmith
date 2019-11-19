@@ -1,0 +1,13 @@
+$width:90vw;
+$height:50vh;
+
+.modal-window{
+    width: $width;
+    height: $height;
+    position: absolute;
+    top: calc(50% - #{$height} / 2);
+    left: calc(50% - #{$width} / 2);
+    z-index: 100;
+    background-color:rgba(0,0,0,0.6);
+    border: 1px solid red;
+}
