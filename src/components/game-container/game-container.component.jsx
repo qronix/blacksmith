@@ -3,6 +3,7 @@ import React, {useContext} from 'react';
 import ItemGrid from '../item-grid/item-grid.component';
 import InfoContainer from '../info-container/info-container.component';
 // import ForgeButton from '../forge-button/forge-button.component';
+import UpgradeWindow from '../upgrade-window/upgrade-window.component';
 import CustomModal from '../custom-modal/custom-modal.component';
 import CustomButton from '../custom-button/custom-button.component';
 import UpgradeContainer from '../upgrade-container/upgrade-container.component';
@@ -22,7 +23,7 @@ const GameContainer = () => {
             <CustomButton img='/imgs/forgeButton.png' action={forgeItem} large/>
             {upgradesShown ?
                 (<CustomModal>
-                    <h1>Yoloswag for Jimmy Carter</h1>
+                    <UpgradeWindow title='Upgrades'/>
                 </CustomModal>)
                 :
                 null
