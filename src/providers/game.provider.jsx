@@ -1,18 +1,22 @@
 import React, {createContext, useState, useEffect, useCallback} from 'react';
 
 import ITEMS from '../item-data';
+import UPGRADES from '../upgrades';
 
 export const GameContext = createContext({
     gridItems: [],
     playerData:{},
     items: [],
+    upgrades:[],
+    modifiers:{},
     selectedItem:{},
     currentForgeProgress:0,
     upgradesShown:null,
     mergeItems:()=>{},
     forgeItem:()=>{},
     getItemInfo:()=>{},
-    toggleUpgrades: ()=>{}
+    toggleUpgrades: ()=>{},
+    purchaseUpgrade:()=>{}
 });
 
 const GameProvider = ({children})=>{
@@ -30,6 +34,12 @@ const GameProvider = ({children})=>{
     });
     const [upgradesShown, setUpgradesShown] = useState(false);
     const [items, setItems] = useState(ITEMS);
+    const [upgrades, setUpgrades] = useState(UPGRADES);
+    const [modifiers, setModifiers] = useState({
+        spawnLevel:1,
+        moneyPerSecond:1,
+        forgeSpeed:1
+    });
     const [selectedItem, setSelectedItem] = useState({
         gridId:[],
         itemName:null
@@ -39,6 +49,18 @@ const GameProvider = ({children})=>{
     //toggle the upgrade window between open and closed
     const toggleUpgrades = ()=>{
         setUpgradesShown((prevUpgradesShown)=>!prevUpgradesShown);
+    }
+
+    const purchaseUpgrade = (id)=>{
+        //get upgrade cost
+        //if we have enough money
+        //add 1 to the rank of the upgrade
+        //if the upgrade is inactive, activate it
+        //increase the cost by the cost * costDelta
+        //update the upgrade object with the new cost
+        //get the item effects
+        //based on effect modifier
+        //update the corresponding game property
     }
 
     //get the item info for an item container
@@ -55,7 +77,7 @@ const GameProvider = ({children})=>{
     const updateMoneyPerSecond = useCallback(() =>{
         let moneyPerSecond = gridItems.flat().reduce((acc, current)=> acc += items[current].moneyPerSecond, 0);
         setPlayerData(prevPlayerData=>{
-            return {...prevPlayerData, moneyPerSecond}
+            return {...prevPlayerData, moneyPerSecond:moneyPerSecond*modifiers.moneyPerSecond}
         });
     },[items]);
 
@@ -72,13 +94,12 @@ const GameProvider = ({children})=>{
         //check if there is space in the grid for a new item
         const spaceInGrid = gridHasSpace();
         if(spaceInGrid){
-            console.log('Adding item to grid');
             for(let i=0; i<gridItems.length; i++){
                 for(let j=0; j<4; j++){
+                    //if grid position is empty
                     if(gridItems[i][j]===0){
-                        // let prevGrid = gridItems;
                         setGridItems((prevGridItems)=>{
-                            prevGridItems[i][j] = 1;
+                            prevGridItems[i][j] = modifiers.spawnLevel;
                             return [...prevGridItems];
                         });
                         return setCurrentForgeProgress(0);
@@ -113,7 +134,7 @@ const GameProvider = ({children})=>{
         const id = setInterval(()=>{
             setCurrentForgeProgress(prevProgress=>{
                 if(prevProgress<100){
-                    setCurrentForgeProgress(prevProgress+1);
+                    setCurrentForgeProgress(prevProgress+modifiers.forgeSpeed);
                 }else{
                     addForgedItem();
                 }
