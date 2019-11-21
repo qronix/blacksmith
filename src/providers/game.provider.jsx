@@ -2,6 +2,7 @@ import React, {createContext, useState, useEffect, useCallback} from 'react';
 
 import ITEMS from '../item-data';
 import UPGRADES from '../upgrades';
+import EFFECTS from '../effects';
 
 export const GameContext = createContext({
     gridItems: [],
@@ -9,6 +10,7 @@ export const GameContext = createContext({
     items: [],
     upgrades:[],
     modifiers:{},
+    effects:[],
     selectedItem:{},
     currentForgeProgress:0,
     upgradesShown:null,
@@ -29,12 +31,13 @@ const GameProvider = ({children})=>{
         [0,0,0,0,],
     ]);
     const [playerData, setPlayerData] = useState({
-        money:0,
+        money:10000000000,
         moneyPerSecond:0,
     });
     const [upgradesShown, setUpgradesShown] = useState(false);
     const [items, setItems] = useState(ITEMS);
     const [upgrades, setUpgrades] = useState(UPGRADES);
+    const [effects, setEffects] = useState(EFFECTS);
     const [modifiers, setModifiers] = useState({
         spawnLevel:1,
         moneyPerSecond:1,
@@ -51,8 +54,45 @@ const GameProvider = ({children})=>{
         setUpgradesShown((prevUpgradesShown)=>!prevUpgradesShown);
     }
 
+    const processEffects = (upgradeEffects)=>{
+        for(let effect in upgradeEffects){
+            const effectID = upgradeEffects[effect];
+            const {modifier:{type,increase}} = effects[effectID];
+            switch(type){
+                case 'spawnLevel':
+                    setModifiers((prevModifiers)=>{
+                        return {...prevModifiers, spawnLevel:(prevModifiers.spawnLevel+=increase)};
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     const purchaseUpgrade = (id)=>{
         //get upgrade cost
+        const upgradeCost = upgrades[id].cost;
+        if(upgradeCost<=playerData.money){
+            setPlayerData(prevPlayerData=>{
+                return {...prevPlayerData, money:(prevPlayerData.money-upgradeCost)}
+            });
+
+            let modUpgrades = upgrades;
+            let changedUpgrade = modUpgrades[id];
+            let {cost, rank, costDelta, effects} = changedUpgrade;
+            cost+=(cost*costDelta);
+            rank+=1;
+            changedUpgrade = {...changedUpgrade, cost, rank};
+            modUpgrades[id] = changedUpgrade;
+            // let playerDataOld = playerData;
+            // setPlayerData(playerDataOld);
+            console.log('Upgrades after change: ', modUpgrades);
+            setUpgrades(modUpgrades);
+            processEffects(effects);
+        } else{
+            console.log('You do not have enough money to purchase this upgrade');
+        }
         //if we have enough money
         //add 1 to the rank of the upgrade
         //if the upgrade is inactive, activate it
@@ -100,6 +140,7 @@ const GameProvider = ({children})=>{
                     if(gridItems[i][j]===0){
                         setGridItems((prevGridItems)=>{
                             prevGridItems[i][j] = modifiers.spawnLevel;
+                            console.log('spawnlevel: ', modifiers.spawnLevel);
                             return [...prevGridItems];
                         });
                         return setCurrentForgeProgress(0);
@@ -136,12 +177,14 @@ const GameProvider = ({children})=>{
                 if(prevProgress<100){
                     setCurrentForgeProgress(prevProgress+modifiers.forgeSpeed);
                 }else{
+                    console.log('Adding item!');
+                    console.log('Spawn level: ', modifiers.spawnLevel);
                     addForgedItem();
                 }
             });
         },50);
         return(id);
-    },[addForgedItem]);
+    },[addForgedItem, modifiers]);
 
     const mergeItems = itemIdentifier => {
         const [rowId, itemId] = itemIdentifier;
@@ -247,6 +290,8 @@ const GameProvider = ({children})=>{
                 forgeItem,
                 getItemInfo,
                 toggleUpgrades,
+                purchaseUpgrade,
+                modifiers,
             }}
         >
             {children}

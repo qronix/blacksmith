@@ -15,6 +15,10 @@ export const formatNumber = (num)=>{
     // const DENOMS = ['M', 'B' , 'T', 'Qua', 'Qui', 'Sext', 'Sept', 'Oct', 'Non', 'Dec'];
     const DENOMS = [
         {
+            value:1000,
+            symbol:'K'
+        },
+        {
             value:1000000,
             symbol: 'Mil'
         },   

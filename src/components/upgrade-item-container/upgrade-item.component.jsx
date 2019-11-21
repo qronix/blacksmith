@@ -1,18 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import uuid from 'uuid';
+
+import {formatNumber} from '../../utils/utils';
+import {GameContext} from '../../providers/game.provider';
 
 import './upgrade-item.styles.scss';
 
-const UpgradeItem = ({info})=> {
+const UpgradeItem = ({info, id})=> {
     const {
         name, 
         description,
         rank, 
         cost, 
-        costDelta, 
-        effects, 
+        // costDelta, 
+        // effects, 
         icon
     } = info;
+
+    const {purchaseUpgrade} = useContext(GameContext);
 
     return(
         <div className='upgrade-item' key={uuid}>
@@ -21,12 +26,12 @@ const UpgradeItem = ({info})=> {
                 <span>{rank}</span>
             </div>
             <div className='upgrade-item-info'>
-                <h6>{name}</h6>
+                <h5>{name}</h5>
                 <p>{description}</p>
             </div>
-            <div className='upgrade-button-container'>
+            <div className='upgrade-button-container' onClick={()=>purchaseUpgrade(id)}>
                 <img src='/imgs/coin.png' alt='coin'/>
-                <span>{cost}</span>
+                <span>{formatNumber(cost)}</span>
             </div>
         </div>
     )
