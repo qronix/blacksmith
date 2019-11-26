@@ -43,7 +43,7 @@ const GameProvider = ({children})=>{
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:1000000,
+        money:1001,
         moneyPerSecond:0,
     });
 
