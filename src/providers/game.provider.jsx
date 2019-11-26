@@ -22,22 +22,6 @@ export const GameContext = createContext({
 });
 
 const GameProvider = ({children})=>{
-    const [gridItems, setGridItems] = useState([
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-    ]);
-    const [playerData, setPlayerData] = useState({
-        money:0,
-        moneyPerSecond:0,
-    });
-    const [upgradesShown, setUpgradesShown] = useState(false);
-    const [items, setItems] = useState(ITEMS);
-    const [upgrades, setUpgrades] = useState(UPGRADES);
-    const [effects, setEffects] = useState(EFFECTS);
 
     const useCurrentState = (initialState)=> {
         const [state, setState] = useState(initialState);
@@ -49,54 +33,32 @@ const GameProvider = ({children})=>{
         return [state, setState, stateRef];
     }
 
+    const [gridItems, setGridItems, gridItemsRef] = useCurrentState([
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,3,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+    ]);
+
+    const [playerData, setPlayerData] = useState({
+        money:1000000,
+        moneyPerSecond:0,
+    });
+
+    const [upgradesShown, setUpgradesShown] = useState(false);
+
+    const [items, setItems] = useState(ITEMS);
+    
+    const [upgrades, setUpgrades] = useState(UPGRADES);
+    const [effects, setEffects] = useState(EFFECTS);
     const [modifiers, setModifiers, modifiersRef] = useCurrentState({
-        spawnLevel:20,
+        spawnLevel:1,
         moneyPerSecond:1,
         forgeSpeed:1
     });
-    // const modifierRef = useRef(modifiers);
-    // const modifierCurrent =
-    // const modifersReducer = (state, action)=>{
-    //     switch(action.type){
-    //         case 'spawnIncrease':
-    //             return {...state, spawnLevel:state.spawnLevel+action.increase};
-    //         default:
-    //             throw new Error('Invalid action type');
-    //     }
-    // }
 
-    // const useModifiersCurrentReducer = (state, action) => {
-    //     switch(action.type){
-    //         case 'spawnIncrease':
-    //             return({...state, spawnLevel:state.spawnLevel+action.increase});
-    //         default:
-    //             throw new Error('Invalid action type');
-    //     }
-    // }
-
-    // const useReducerCurrent = (reducer, initialState)=>{
-    //     const [state, setState] = useState(initialState);
-    //     const stateRef = useRef(state);
-
-    //     useEffect(()=>{
-    //         stateRef.current = state;
-    //     },[state]);
-    //     // const dispatch = (action)=>reducer(stateRef.current, action);
-    //     setState(()=>{
-    //         return (action)=>reducer(stateRef.current, action);
-    //     });
-    // }
-    // const [modifiers, dispatchModifiers] = useReducer(useModifiersCurrentReducer, {
-    //     spawnLevel: 1,
-    //     moneyPerSecond: 1,
-    //     forgeSpeed: 1,
-    // });
-
-    // const [modifiers, dispatchModifiers] = useReducerCurrent(useModifiersCurrentReducer,{
-    //     spawnLevel: 1,
-    //     moneyPerSecond: 1,
-    //     forgeSpeed: 1,
-    // });
     const [selectedItem, setSelectedItem] = useState({
         gridId:[],
         itemName:null
@@ -114,11 +76,8 @@ const GameProvider = ({children})=>{
             const {modifier:{type,increase}} = effects[effectID];
             switch(type){
                 case 'spawnLevel':
-                    // setModifiers((prevModifiers)=>{
-                    //     return {...prevModifiers, spawnLevel:(prevModifiers.spawnLevel+=increase)};
-                    // });
-                    // dispatchModifiers({type:'spawnIncrease', increase});
                     setModifiers({...modifiersRef.current, spawnLevel:modifiersRef.current.spawnLevel+=increase});
+                    convertLowerItems();
                     break;
                 default:
                     break;
@@ -126,6 +85,65 @@ const GameProvider = ({children})=>{
         }
     }
 
+
+    //when using the item upgrade modification, singular lower level items
+    //sometimes remain behind and can no longer be used
+    //searches the grid for any item whose level is lower
+    //than the current spawn level and then for
+    //each item found this takes the MPS (money per second) for the item
+    //multiplies it by 60 (a full minutes worth of output)
+    //adds that value to the players money and removes the
+    //item from the grid
+    const convertLowerItems = ()=> {
+        //search grid for items with level lower than
+        //current spawn level
+        let convertedCash = 0;
+        let correctGridItems = gridItems.flat().map(item=>{
+            if(item<modifiersRef.current.spawnLevel){
+                convertedCash+=(items[item].moneyPerSecond * 60);
+                return 0;
+            }else{
+                return item;
+            }
+        });
+        setPlayerData((prevPlayerData)=>({...prevPlayerData, money:prevPlayerData.money+convertedCash}));
+        convertFlatArrayToGrid(correctGridItems);
+    }
+
+    const convertFlatArrayToGrid = (flatArray)=> {
+        //take an array with length of 24 items
+        //to a 4 x 6 array
+        let grid = [];
+        let row = [];
+        let indexCounter = 0;
+        const ARRAY_ROW_WIDTH_REQUIREMENT = 4;
+        const ARRAY_ROW_HEIGHT_REQUIREMENT = 6;
+        const ARRAY_LENGTH_REQUIREMENT = (ARRAY_ROW_WIDTH_REQUIREMENT * ARRAY_ROW_HEIGHT_REQUIREMENT);
+
+        if(flatArray.length !== ARRAY_LENGTH_REQUIREMENT){
+            throw Error('Array is incorrect length');
+        }else{
+            //row
+            for(let i=0; i<ARRAY_ROW_HEIGHT_REQUIREMENT; i++){
+                //column
+                for(let j=0; j<ARRAY_ROW_WIDTH_REQUIREMENT; j++){
+                    row.push(flatArray[indexCounter]);
+                    indexCounter++;
+                }
+                grid.push(row);
+                row=[];
+            }
+            setGridItems(grid);
+        }
+    }
+    //if we have enough money
+    //add 1 to the rank of the upgrade
+    //if the upgrade is inactive, activate it
+    //increase the cost by the cost * costDelta
+    //update the upgrade object with the new cost
+    //get the item effects
+    //based on effect modifier
+    //update the corresponding game property
     const purchaseUpgrade = (id)=>{
         //get upgrade cost
         const upgradeCost = upgrades[id].cost;
@@ -141,22 +159,11 @@ const GameProvider = ({children})=>{
             rank+=1;
             changedUpgrade = {...changedUpgrade, cost, rank};
             modUpgrades[id] = changedUpgrade;
-            // let playerDataOld = playerData;
-            // setPlayerData(playerDataOld);
-            console.log('Upgrades after change: ', modUpgrades);
             setUpgrades(modUpgrades);
             processEffects(effects);
         } else{
             console.log('You do not have enough money to purchase this upgrade');
         }
-        //if we have enough money
-        //add 1 to the rank of the upgrade
-        //if the upgrade is inactive, activate it
-        //increase the cost by the cost * costDelta
-        //update the upgrade object with the new cost
-        //get the item effects
-        //based on effect modifier
-        //update the corresponding game property
     }
 
     //get the item info for an item container
@@ -179,24 +186,23 @@ const GameProvider = ({children})=>{
 
 
     const gridHasSpace = ()=> {
-        let hasSpace = gridItems.flat().some(item=>item===0);
+        let hasSpace = gridItemsRef.current.flat().some(item=>item===0);
         return hasSpace;
     }
 
+    //when the forge is done creating a new item
+    //loop through the grid to find a blank space
+    //add a new item to that spot and stop execution
+    //check if there is space in the grid for a new item
     const addForgedItem = useCallback(()=> {
-        //when the forge is done creating a new item
-        //loop through the grid to find a blank space
-        //add a new item to that spot and stop execution
-        //check if there is space in the grid for a new item
         const spaceInGrid = gridHasSpace();
         if(spaceInGrid){
-            for(let i=0; i<gridItems.length; i++){
+            for(let i=0; i<gridItemsRef.current.length; i++){
                 for(let j=0; j<4; j++){
                     //if grid position is empty
-                    if(gridItems[i][j]===0){
+                    if(gridItemsRef.current[i][j]===0){
                         setGridItems((prevGridItems)=>{
                             prevGridItems[i][j] = modifiersRef.current.spawnLevel;
-                            console.log('spawnlevel: ', modifiersRef.current.spawnLevel);
                             return [...prevGridItems];
                         });
                         return setCurrentForgeProgress(0);
@@ -206,7 +212,6 @@ const GameProvider = ({children})=>{
         }
     },[gridItems]);
 
-    
     const updateMoney = ()=> {
         const id = setInterval(()=>{
             setPlayerData(prevPlayerData=>{
@@ -244,6 +249,7 @@ const GameProvider = ({children})=>{
         const [rowId, itemId] = itemIdentifier;
         const itemIndex = gridItems[rowId][itemId];
         const {itemName} = items[itemIndex];
+
         if(itemIndex === (items.length-1)){
             return console.log('This is a max level item and cannot be merged');
         }
@@ -251,10 +257,6 @@ const GameProvider = ({children})=>{
         //get item location on grid and item level
         //set source item to the item which was clicked
         if(selectedItem.itemName === null){
-            console.log('ItemIndex: ', itemIndex);
-            console.log('GridId: ', [[rowId],[itemId]]);
-            console.log('ItemName: ', itemName);
-            console.log('GridItems:', gridItems);
             return setSelectedItem(
                 {
                     gridId: [rowId,itemId],
@@ -273,10 +275,6 @@ const GameProvider = ({children})=>{
             let prevGridItems = gridItems;
 
             //check if current item and previous item are the same slot
-            console.log('Source index: ', sourceIndex);
-            console.log('Source element: ', sourceElement);
-            console.log('Row Id: ', rowId);
-            console.log('itemId: ', itemId);
             if((sourceIndex === rowId) && (sourceElement === itemId)){
                 //add functionality to deselect item
                 setSelectedItem({
@@ -287,9 +285,6 @@ const GameProvider = ({children})=>{
             }
             //check if both selected items are the same type
             if(((selectedItem.itemName === itemName) && itemName !== 'Empty')){
-                console.log('itemName === Empty: ', itemName === 'Empty');
-                console.log('Source item name: ', selectedItem.itemName);
-                console.log('Current item name: ', itemName);
                 //advance the target item to the next item level
                 prevGridItems[rowId][itemId] += 1;
                 //set the previous item to a blank item
@@ -309,11 +304,9 @@ const GameProvider = ({children})=>{
             });
             setGridItems([...prevGridItems]);
         }
-        console.dir(gridItems);
     }
 
     useEffect(()=>{
-        console.log('Running forge!');
         const id = runForge();
         return ()=> {
             clearInterval(id);
