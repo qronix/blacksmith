@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, useCallback} from 'react';
+import React, {createContext, useState, useEffect, useCallback, useRef} from 'react';
 
 import ITEMS from '../item-data';
 import UPGRADES from '../upgrades';
@@ -31,18 +31,72 @@ const GameProvider = ({children})=>{
         [0,0,0,0,],
     ]);
     const [playerData, setPlayerData] = useState({
-        money:10000000000,
+        money:0,
         moneyPerSecond:0,
     });
     const [upgradesShown, setUpgradesShown] = useState(false);
     const [items, setItems] = useState(ITEMS);
     const [upgrades, setUpgrades] = useState(UPGRADES);
     const [effects, setEffects] = useState(EFFECTS);
-    const [modifiers, setModifiers] = useState({
-        spawnLevel:1,
+
+    const useCurrentState = (initialState)=> {
+        const [state, setState] = useState(initialState);
+        const stateRef = useRef(state);
+        useEffect(()=>{
+            stateRef.current = state;
+        },[state]);
+
+        return [state, setState, stateRef];
+    }
+
+    const [modifiers, setModifiers, modifiersRef] = useCurrentState({
+        spawnLevel:20,
         moneyPerSecond:1,
         forgeSpeed:1
     });
+    // const modifierRef = useRef(modifiers);
+    // const modifierCurrent =
+    // const modifersReducer = (state, action)=>{
+    //     switch(action.type){
+    //         case 'spawnIncrease':
+    //             return {...state, spawnLevel:state.spawnLevel+action.increase};
+    //         default:
+    //             throw new Error('Invalid action type');
+    //     }
+    // }
+
+    // const useModifiersCurrentReducer = (state, action) => {
+    //     switch(action.type){
+    //         case 'spawnIncrease':
+    //             return({...state, spawnLevel:state.spawnLevel+action.increase});
+    //         default:
+    //             throw new Error('Invalid action type');
+    //     }
+    // }
+
+    // const useReducerCurrent = (reducer, initialState)=>{
+    //     const [state, setState] = useState(initialState);
+    //     const stateRef = useRef(state);
+
+    //     useEffect(()=>{
+    //         stateRef.current = state;
+    //     },[state]);
+    //     // const dispatch = (action)=>reducer(stateRef.current, action);
+    //     setState(()=>{
+    //         return (action)=>reducer(stateRef.current, action);
+    //     });
+    // }
+    // const [modifiers, dispatchModifiers] = useReducer(useModifiersCurrentReducer, {
+    //     spawnLevel: 1,
+    //     moneyPerSecond: 1,
+    //     forgeSpeed: 1,
+    // });
+
+    // const [modifiers, dispatchModifiers] = useReducerCurrent(useModifiersCurrentReducer,{
+    //     spawnLevel: 1,
+    //     moneyPerSecond: 1,
+    //     forgeSpeed: 1,
+    // });
     const [selectedItem, setSelectedItem] = useState({
         gridId:[],
         itemName:null
@@ -60,9 +114,11 @@ const GameProvider = ({children})=>{
             const {modifier:{type,increase}} = effects[effectID];
             switch(type){
                 case 'spawnLevel':
-                    setModifiers((prevModifiers)=>{
-                        return {...prevModifiers, spawnLevel:(prevModifiers.spawnLevel+=increase)};
-                    });
+                    // setModifiers((prevModifiers)=>{
+                    //     return {...prevModifiers, spawnLevel:(prevModifiers.spawnLevel+=increase)};
+                    // });
+                    // dispatchModifiers({type:'spawnIncrease', increase});
+                    setModifiers({...modifiersRef.current, spawnLevel:modifiersRef.current.spawnLevel+=increase});
                     break;
                 default:
                     break;
@@ -139,8 +195,8 @@ const GameProvider = ({children})=>{
                     //if grid position is empty
                     if(gridItems[i][j]===0){
                         setGridItems((prevGridItems)=>{
-                            prevGridItems[i][j] = modifiers.spawnLevel;
-                            console.log('spawnlevel: ', modifiers.spawnLevel);
+                            prevGridItems[i][j] = modifiersRef.current.spawnLevel;
+                            console.log('spawnlevel: ', modifiersRef.current.spawnLevel);
                             return [...prevGridItems];
                         });
                         return setCurrentForgeProgress(0);
@@ -177,8 +233,6 @@ const GameProvider = ({children})=>{
                 if(prevProgress<100){
                     setCurrentForgeProgress(prevProgress+modifiers.forgeSpeed);
                 }else{
-                    console.log('Adding item!');
-                    console.log('Spawn level: ', modifiers.spawnLevel);
                     addForgedItem();
                 }
             });
