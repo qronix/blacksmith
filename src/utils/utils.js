@@ -76,7 +76,8 @@ export const formatNumber = (num)=>{
             if(remainder>1000){
                 continue;
             }else if(remainder>= 1 && remainder<=1000){
-                let formattedValue = `${remainder.toFixed(0)} ${symbol}`;
+                // let formattedValue = `${remainder.toFixed(0)} ${symbol}`;
+                let formattedValue = `${Math.floor(remainder)} ${symbol}`;
                 return formattedValue;
             } else{
                 console.log('Cannot format: ', num);

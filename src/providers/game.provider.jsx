@@ -43,7 +43,7 @@ const GameProvider = ({children})=>{
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:1001,
+        money:1000000,
         moneyPerSecond:0,
     });
 
@@ -107,6 +107,10 @@ const GameProvider = ({children})=>{
             }
         });
         setPlayerData((prevPlayerData)=>({...prevPlayerData, money:prevPlayerData.money+convertedCash}));
+        setSelectedItem({
+            gridId:[],
+            itemName:null
+        });
         convertFlatArrayToGrid(correctGridItems);
     }
 
@@ -178,7 +182,7 @@ const GameProvider = ({children})=>{
     }
 
     const updateMoneyPerSecond = useCallback(() =>{
-        let moneyPerSecond = gridItems.flat().reduce((acc, current)=> acc += items[current].moneyPerSecond, 0);
+        let moneyPerSecond = gridItemsRef.current.flat().reduce((acc, current)=> acc += items[current].moneyPerSecond, 0);
         setPlayerData(prevPlayerData=>{
             return {...prevPlayerData, moneyPerSecond:moneyPerSecond*modifiers.moneyPerSecond}
         });
