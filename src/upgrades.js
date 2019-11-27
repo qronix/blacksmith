@@ -8,6 +8,16 @@ const UPGRADES = [
         effects:[0],
         active:false,
         icon:'/imgs/dag_01.png'
+    },
+    {
+        name: 'Forge Speed',
+        description: 'Forge generates items faster',
+        rank:0,
+        cost:500000,
+        costDelta:4,
+        effects:[1],
+        active:false,
+        icon:'/imgs/hm_t_02.png'
     }
 ];
 

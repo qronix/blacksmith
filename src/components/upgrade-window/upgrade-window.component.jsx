@@ -16,7 +16,7 @@ const UpgradeWindow = ({title})=> {
         let upgrades = [];
         for(let upgrade in UPGRADES){
             const {name, description, rank, cost, icon} = UPGRADES[upgrade];
-            const item = <UpgradeItem info={{name,description,rank,cost,icon}} key={uuid} id={upgrade}/>;
+            const item = <UpgradeItem info={{name,description,rank,cost,icon}} key={uuid()} id={upgrade}/>;
             upgrades.push(item);
         }
         return upgrades;

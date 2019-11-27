@@ -43,7 +43,7 @@ const GameProvider = ({children})=>{
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:1000000,
+        money:400000000000,
         moneyPerSecond:0,
     });
 
@@ -78,6 +78,9 @@ const GameProvider = ({children})=>{
                 case 'spawnLevel':
                     setModifiers({...modifiersRef.current, spawnLevel:modifiersRef.current.spawnLevel+=increase});
                     convertLowerItems();
+                    break;
+                case 'forgeSpeed':
+                    setModifiers({...modifiersRef.current, forgeSpeed:modifiersRef.current.forgeSpeed+=increase});
                     break;
                 default:
                     break;
@@ -240,7 +243,8 @@ const GameProvider = ({children})=>{
         const id = setInterval(()=>{
             setCurrentForgeProgress(prevProgress=>{
                 if(prevProgress<100){
-                    setCurrentForgeProgress(prevProgress+modifiers.forgeSpeed);
+                    // setCurrentForgeProgress(prevProgress+modifiersRef.current.forgeSpeed);
+                    return(prevProgress+modifiersRef.current.forgeSpeed);
                 }else{
                     addForgedItem();
                 }

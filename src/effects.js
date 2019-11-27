@@ -5,6 +5,13 @@ const EFFECTS = [
             type:'spawnLevel',
             increase:1
         }
+    },
+    {
+        name: 'Test effect 2',
+        modifier:{
+            type:'forgeSpeed',
+            increase:0.3
+        }
     }
 ];
 
