@@ -1,16 +1,14 @@
 import React, {useContext} from 'react';
 
 import { GameContext } from '../../providers/game.provider';
-import {compareArrays, formatNumber} from '../../utils/utils';
+import { compareArrays, formatNumber } from '../../utils/utils';
 
 import './item-container.styles.scss';
 
-// import sword from '../../assets/sword.jpg';
-//rowId => x coord, rowItemId => y coord
-const ItemContainer = ({rowId, rowItemId}) => {
+const ItemContainer = ({ rowId, rowItemId }) => {
 
-    const {mergeItems, getItemInfo, selectedItem:{gridId, itemName}} = useContext(GameContext);
-    const handleClick = ()=> {
+    const { mergeItems, getItemInfo, selectedItem:{gridId, itemName} } = useContext(GameContext);
+    const handleClick = () => {
         mergeItems([rowId, rowItemId]);
     }
     const myItem = getItemInfo(rowId, rowItemId);
@@ -22,7 +20,7 @@ const ItemContainer = ({rowId, rowItemId}) => {
 
     return(
         (myItem.img !== null) 
-            ? <div className={`item-container ${(isSelected) ? 'selected' : null} ${(sameAsSelected) ? 'mergeable' : null}`} onClick={()=>handleClick()}
+            ? <div className={`item-container ${(isSelected) ? 'selected' : null} ${(sameAsSelected) ? 'mergeable' : null}`} onClick={() => handleClick() }
                 style={{
                     backgroundImage:`url(${myItem.img})`,
                     backgroundRepeat: 'no-repeat',
@@ -32,11 +30,11 @@ const ItemContainer = ({rowId, rowItemId}) => {
                 >
                     <div className='item-container-revenue'>
                         <img src='/imgs/coin.png' alt='coin' className='item-container-revenue-coin'/>
-                        <span className='item-container-revenue-value'>{formatNumber(myItem.moneyPerSecond)}</span>
+                        <span className='item-container-revenue-value'>{ formatNumber(myItem.moneyPerSecond) }</span>
                     </div>
                 </div> 
             : 
-            <div className={`item-container ${(isSelected) ? 'selected' : null}`} onClick={()=>handleClick()}/>
+            <div className={ `item-container ${(isSelected) ? 'selected' : null}`} onClick={ () => handleClick() }/>
             
     );
 }

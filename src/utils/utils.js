@@ -1,4 +1,4 @@
-export const compareArrays = (arr1, arr2)=>{
+export const compareArrays = (arr1, arr2) => {
     //check that arrays are the same length
     if(arr1.length === arr2.length){
         for(let i=0; i<arr1.length; i++){
@@ -11,8 +11,7 @@ export const compareArrays = (arr1, arr2)=>{
     }
 }
 
-export const formatNumber = (num)=>{
-    // const DENOMS = ['M', 'B' , 'T', 'Qua', 'Qui', 'Sext', 'Sept', 'Oct', 'Non', 'Dec'];
+export const formatNumber = num => {
     const DENOMS = [
         {
             value:1000,
@@ -71,12 +70,11 @@ export const formatNumber = (num)=>{
         return num;
     } else{
         for(let denom in DENOMS){
-            const {value, symbol} = DENOMS[denom];
+            const { value, symbol } = DENOMS[denom];
             let remainder = num / value;
-            if(remainder>1000){
+            if(remainder > 1000 ){
                 continue;
-            }else if(remainder>= 1 && remainder<=1000){
-                // let formattedValue = `${remainder.toFixed(0)} ${symbol}`;
+            }else if(remainder >= 1 && remainder <= 1000){
                 let formattedValue = `${Math.floor(remainder)} ${symbol}`;
                 return formattedValue;
             } else{

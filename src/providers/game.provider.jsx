@@ -6,27 +6,33 @@ import EFFECTS from '../effects';
 
 export const GameContext = createContext({
     gridItems: [],
-    playerData:{},
+    playerData: {},
     items: [],
-    upgrades:[],
-    modifiers:{},
-    effects:[],
-    selectedItem:{},
+    upgrades: [],
+    modifiers: {},
+    effects: [],
+    selectedItem: {},
     currentForgeProgress:0,
     upgradesShown:null,
-    mergeItems:()=>{},
-    forgeItem:()=>{},
-    getItemInfo:()=>{},
-    toggleUpgrades: ()=>{},
-    purchaseUpgrade:()=>{}
+    mergeItems:() => {},
+    forgeItem:() => {},
+    getItemInfo:() => {},
+    toggleUpgrades: () => {},
+    purchaseUpgrade:() => {}
 });
 
-const GameProvider = ({children})=>{
+const GameProvider = ({ children }) => {
 
-    const useCurrentState = (initialState)=> {
+    //allows the use of proper state
+    //within asynchronous functions and their
+    //called children. Without this, asynchronous
+    //functions will not read the current state
+    //due to the execution context enclosing the 
+    //initial state
+    const useCurrentState = initialState => {
         const [state, setState] = useState(initialState);
         const stateRef = useRef(state);
-        useEffect(()=>{
+        useEffect(() => {
             stateRef.current = state;
         },[state]);
 
@@ -43,7 +49,7 @@ const GameProvider = ({children})=>{
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:400000000000000000,
+        money:1000000000000000,
         moneyPerSecond:0,
     });
 
@@ -58,7 +64,7 @@ const GameProvider = ({children})=>{
         moneyPerSecond:1,
         forgeSpeed:1,
         autoMerge:{
-            active: true,
+            active: false,
             mergeSpeed:500
         }
     });
@@ -69,7 +75,7 @@ const GameProvider = ({children})=>{
     });
     const[currentForgeProgress, setCurrentForgeProgress] = useState(0);
 
-    const findItemPair = ()=> {
+    const findItemPair = () => {
         //loop through gridItems
         //find two items of the same type
         //return the coordinates for the items
@@ -84,17 +90,20 @@ const GameProvider = ({children})=>{
                 //matching items in the grid
                 if(target === null){
                     target = [i,j];
-                    //WHAT A NASTY BUG!!
-                    //TOOK ME THREE DAYS TO FIX THIS!
+                   
+                    //check if the current item is empty
+                    //if so, skip this item
+                    //if this check is not here then duplicate level 1 items
+                    //are added to the grid because every empty item
+                    //is a "pair" which triggers a level 1 item to appear
                     if(gridItemsRef.current[target[0]][target[1]] === 0){
                         target = null;
                         continue;
                     }else{
-                        // console.log('Getting count for item');
                         const count = getItemIdCount(gridItemsRef.current[target[0]][target[1]]);
                         //if at least two matching items
                         //continue to the next grid item
-                        if(count>=2){
+                        if(count >= 2){
                             continue;
                         }else{
                             //if there are less than two of the same item
@@ -105,7 +114,7 @@ const GameProvider = ({children})=>{
                     }
                     //if we have a target AND a match
                     //return the grid coords for both items
-                }else if(gridItemsRef.current[i][j]===gridItemsRef.current[target[0]][target[1]]){
+                }else if(gridItemsRef.current[i][j] === gridItemsRef.current[target[0]][target[1]]){
                     target2 = [i,j];
                     return [target, target2];
                 }
@@ -114,88 +123,58 @@ const GameProvider = ({children})=>{
         return null;
     }
 
-    const getItemIdCount = id =>{
-        let count = gridItemsRef.current.flat().reduce((acc, curr)=>acc+=(curr===id),0);
+    const getItemIdCount = id => {
+        let count = gridItemsRef.current.flat().reduce((acc, curr) => acc += (curr === id),0);
         return count;
     }
 
-    const getNonEmptySpaces = ()=>{
-        // console.log('NonEmpty Grid: ', gridItemsRef.current);
-        const count = gridItemsRef.current.flat().filter(id=>id!==0).length;
-        // console.log('Grid REF after count grab: ', gridItemsRef.current);
-        // console.log('NonEmpty Grid (FLAT): ', gridItemsRef.current.flat());
-        // console.log('Count: ', count);
+    const getNonEmptySpaces = () => {
+        const count = gridItemsRef.current.flat().filter(id => id !== 0).length;
         return count;
     }
-    // useEffect(()=>{
-    //     // console.log('GridItems changed to: ', gridItemsRef.current);
-    // },[gridItemsRef.current]);
 
-    const autoMerge = ()=>{
-        // console.log('Auto merging!');
-        //check that the grid has two items
-        let nonEmptyCount = getNonEmptySpaces();
-        // console.log('Non empty spaces: ', nonEmptyCount);
-        // if(getNonEmptySpaces()>=2){
-            let targets = findItemPair();
-            // console.log('Targets: ', targets);
-            if(targets){
-                const [target1, target2] = targets;
-                const [tar1X, tar1Y] = target1;
-                const [tar2X, tar2Y] = target2;
-                if(gridItemsRef.current[tar1X][tar1Y] === (items.length-1)){
-                    return console.log('This is a max level item and cannot be merged');
-                } else{
-                    setGridItems(()=>{
-                        let grid = [...gridItemsRef.current];
-                        //advance item to next level
-                        grid[tar1X][tar1Y] = gridItemsRef.current[tar1X][tar1Y] + 1;
-                        // console.log(`Advancing item: ${tar1X} ${tar1Y}`);
-                        //clear second item
-                        grid[tar2X][tar2Y] = 0;
-                        // console.log(`Clearing item: ${tar2X} , ${tar2Y}`);
-                        // console.log('Setting grid to (autoMerge): ', grid);
-                        return [...grid];
-                    });
-                }
-            }else{
-                return console.log('No matching items found');
+    const autoMerge = () => {
+        let targets = findItemPair();
+        if(targets){
+            const [target1, target2] = targets;
+            const [tar1X, tar1Y] = target1;
+            const [tar2X, tar2Y] = target2;
+            if(gridItemsRef.current[tar1X][tar1Y] === (items.length - 1)){
+                return console.log('This is a max level item and cannot be merged');
+            } else{
+                setGridItems(() => {
+                    let grid = [...gridItemsRef.current];
+                    //advance item to next level
+                    grid[tar1X][tar1Y] = gridItemsRef.current[tar1X][tar1Y] + 1;
+                    //clear second item
+                    grid[tar2X][tar2Y] = 0;
+                    return [...grid];
+                });
             }
-        // }
-        //if the two items are not the same type, timeout (return)
-        //else
-        //loop through the items until two of the same type are found
-        //if two of the same type are found, call the merge function
-
+        }else{
+            return console.log('No matching items found');
+        }
     }
-
-    // useEffect(()=>{
-    //     let id = null;
-    //     const {active, mergeSpeed} = modifiersRef.current.autoMerge;
-    //     console.log('Automerge active: ', active);
-    //     if(active){
-    //         id = setInterval(()=>autoMerge(), mergeSpeed);
-    //     }else{
-    //         if(id) return clearInterval(id);
-    //     }
-    // },[modifiersRef]);
     
     //toggle the upgrade window between open and closed
-    const toggleUpgrades = ()=>{
-        setUpgradesShown((prevUpgradesShown)=>!prevUpgradesShown);
+    const toggleUpgrades = () => {
+        setUpgradesShown(prevUpgradesShown => !prevUpgradesShown);
     }
 
-    const processEffects = (upgradeEffects)=>{
+    const processEffects = upgradeEffects => {
         for(let effect in upgradeEffects){
             const effectID = upgradeEffects[effect];
-            const {modifier:{type,increase}} = effects[effectID];
+            const { modifier: { type, increase } } = effects[effectID];
             switch(type){
                 case 'spawnLevel':
-                    setModifiers({...modifiersRef.current, spawnLevel:modifiersRef.current.spawnLevel+=increase});
+                    setModifiers({ ...modifiersRef.current, spawnLevel:modifiersRef.current.spawnLevel += increase });
                     convertLowerItems();
                     break;
                 case 'forgeSpeed':
-                    setModifiers({...modifiersRef.current, forgeSpeed:modifiersRef.current.forgeSpeed+=increase});
+                    setModifiers({ ...modifiersRef.current, forgeSpeed:modifiersRef.current.forgeSpeed += increase });
+                    break;
+                case 'autoMerge':
+                    setModifiers({...modifiersRef.current, autoMerge:{...modifiersRef.current.autoMerge, active:true}});
                     break;
                 default:
                     break;
@@ -212,19 +191,19 @@ const GameProvider = ({children})=>{
     //multiplies it by 60 (a full minutes worth of output)
     //adds that value to the players money and removes the
     //item from the grid
-    const convertLowerItems = ()=> {
+    const convertLowerItems = () => {
         //search grid for items with level lower than
         //current spawn level
         let convertedCash = 0;
-        let correctGridItems = gridItemsRef.current.flat().map(item=>{
-            if(item<modifiersRef.current.spawnLevel){
-                convertedCash+=(items[item].moneyPerSecond * 60);
+        let correctGridItems = gridItemsRef.current.flat().map(item => {
+            if(item < modifiersRef.current.spawnLevel){
+                convertedCash += (items[item].moneyPerSecond * 60);
                 return 0;
             }else{
                 return item;
             }
         });
-        setPlayerData((prevPlayerData)=>({...prevPlayerData, money:prevPlayerData.money+convertedCash}));
+        setPlayerData(prevPlayerData => ({ ...prevPlayerData, money:prevPlayerData.money+convertedCash }));
         setSelectedItem({
             gridId:[],
             itemName:null
@@ -232,7 +211,7 @@ const GameProvider = ({children})=>{
         convertFlatArrayToGrid(correctGridItems);
     }
 
-    const convertFlatArrayToGrid = (flatArray)=> {
+    const convertFlatArrayToGrid = flatArray => {
         //take an array with length of 24 items
         //to a 4 x 6 array
         let grid = [];
@@ -253,7 +232,7 @@ const GameProvider = ({children})=>{
                     indexCounter++;
                 }
                 grid.push(row);
-                row=[];
+                row = [];
             }
             setGridItems(grid);
         }
@@ -266,20 +245,20 @@ const GameProvider = ({children})=>{
     //get the item effects
     //based on effect modifier
     //update the corresponding game property
-    const purchaseUpgrade = (id)=>{
+    const purchaseUpgrade = id => {
         //get upgrade cost
         const upgradeCost = upgrades[id].cost;
-        if(upgradeCost<=playerData.money){
-            setPlayerData(prevPlayerData=>{
-                return {...prevPlayerData, money:(prevPlayerData.money-upgradeCost)}
+        if(upgradeCost <= playerData.money){
+            setPlayerData(prevPlayerData => {
+                return { ...prevPlayerData, money:(prevPlayerData.money - upgradeCost) }
             });
 
             let modUpgrades = upgrades;
             let changedUpgrade = modUpgrades[id];
-            let {cost, rank, costDelta, effects} = changedUpgrade;
-            cost+=(cost*costDelta);
-            rank+=1;
-            changedUpgrade = {...changedUpgrade, cost, rank};
+            let { cost, rank, costDelta, effects } = changedUpgrade;
+            cost += (cost * costDelta);
+            rank += 1;
+            changedUpgrade = { ...changedUpgrade, cost, rank };
             modUpgrades[id] = changedUpgrade;
             setUpgrades(modUpgrades);
             processEffects(effects);
@@ -293,22 +272,22 @@ const GameProvider = ({children})=>{
     //this will get the item index from the
     //gridItems array by using the row and rowItem Ids
     //as coordinates for the multidimensional array
-    const getItemInfo = (rowId, rowItemId)=>{
+    const getItemInfo = (rowId, rowItemId) => {
         const itemId = gridItemsRef.current[rowId][rowItemId];
         const itemData = items[itemId];
         return itemData;
     }
 
-    const updateMoneyPerSecond = useCallback(() =>{
-        let moneyPerSecond = gridItemsRef.current.flat().reduce((acc, current)=> acc += items[current].moneyPerSecond, 0);
-        setPlayerData(prevPlayerData=>{
-            return {...prevPlayerData, moneyPerSecond:moneyPerSecond*modifiers.moneyPerSecond}
+    const updateMoneyPerSecond = useCallback(() => {
+        let moneyPerSecond = gridItemsRef.current.flat().reduce((acc, current) => acc += items[current].moneyPerSecond, 0);
+        setPlayerData(prevPlayerData => {
+            return { ...prevPlayerData, moneyPerSecond:moneyPerSecond*modifiers.moneyPerSecond }
         });
     },[items]);
 
 
-    const gridHasSpace = ()=> {
-        let hasSpace = gridItemsRef.current.flat().some(item=>item===0);
+    const gridHasSpace = () => {
+        let hasSpace = gridItemsRef.current.flat().some(item => item === 0);
         return hasSpace;
     }
 
@@ -316,53 +295,40 @@ const GameProvider = ({children})=>{
     //loop through the grid to find a blank space
     //add a new item to that spot and stop execution
     //check if there is space in the grid for a new item
-    const addForgedItem = ()=> {
+    const addForgedItem = () => {
         const spaceInGrid = gridHasSpace();
         if(spaceInGrid){
             for(let i=0; i<gridItemsRef.current.length; i++){
-                    for(let j=0; j<4; j++){
-                        //if grid position is empty
-                        // debugger;
-                        if(gridItemsRef.current[i][j]===0){
-                            // setGridItems((prevGridItems)=>{
-                            //     prevGridItems[i][j] = modifiersRef.current.spawnLevel;
-                            //     // console.log('GridItems (AddForgedItems): ', [...prevGridItems]);
-                            //     return [...prevGridItems];
-                            // });
-                            // let grid = [...gridItems];
-                            // grid[i][j] = modifiersRef.current.spawnLevel;
-                            setCurrentForgeProgress(0);
-                            return setGridItems(()=>{
-                                let grid = [...gridItemsRef.current];
-                                grid[i][j] = modifiersRef.current.spawnLevel;
-                                return [...grid];
-                            });
-                        }
+                for(let j=0; j<4; j++){
+                    //if grid position is empty
+                    if(gridItemsRef.current[i][j] === 0){
+                        //reset forge so the next item
+                        //can begin forging
+                        setCurrentForgeProgress(0);
+                        return setGridItems(() => {
+                            let grid = [...gridItemsRef.current];
+                            grid[i][j] = modifiersRef.current.spawnLevel;
+                            return [...grid];
+                        });
                     }
+                }
             }
-            // if(modifiersRef.current.autoMerge.active){
-            //     console.log('AUTOMERGEEEE!');
-            //     console.log('Grid before autoMerge: ', gridItems);
-            //     console.log('Gridref before autoMerge: ', gridItemsRef.current);
-            //     debugger;
-            //     autoMerge();
-            // }
         }
     };
 
-    const updateMoney = ()=> {
-        const id = setInterval(()=>{
-            setPlayerData(prevPlayerData=>{
-                const {money, moneyPerSecond} = prevPlayerData;
-                return {...prevPlayerData, money:money+moneyPerSecond}
+    const updateMoney = () => {
+        const id = setInterval(() => {
+            setPlayerData(prevPlayerData => {
+                const { money, moneyPerSecond } = prevPlayerData;
+                return { ...prevPlayerData, money:money+moneyPerSecond }
             });
         },1000);
         return id;
     };
 
     const forgeItem = () => {
-        if(currentForgeProgress<100){
-            setCurrentForgeProgress((prevProgress)=>{
+        if(currentForgeProgress < 100){
+            setCurrentForgeProgress(prevProgress => {
                 return prevProgress += 20;
             });
         }else{
@@ -370,23 +336,20 @@ const GameProvider = ({children})=>{
         }
     }
 
-    const runForge = useCallback(()=> {
-        const id = setInterval(()=>{
-            setCurrentForgeProgress(prevProgress=>{
-                if(prevProgress<100){
-                    // setCurrentForgeProgress(prevProgress+modifiersRef.current.forgeSpeed);
+    const runForge = useCallback(() => {
+        const id = setInterval(() => {
+            setCurrentForgeProgress(prevProgress => {
+                if(prevProgress < 100 ){
                     return(prevProgress+modifiersRef.current.forgeSpeed);
                 }else{
-                    // console.log('Forge Item Grid: ', gridItems);
-                    // console.log('Forge Item Grid (REF): ', gridItemsRef.current);
                     addForgedItem();
                 }
             });
         },50);
         return(id);
-    },[modifiers]);
+    },[]);
 
-    const mergeItems = (itemIdentifier) => {
+    const mergeItems = itemIdentifier => {
         const [rowId, itemId] = itemIdentifier;
         const itemIndex = gridItemsRef.current[rowId][itemId];
         const {itemName} = items[itemIndex];
@@ -447,31 +410,36 @@ const GameProvider = ({children})=>{
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const id = runForge();
-        return ()=> {
-            clearInterval(id);
-        };
+        return () => clearInterval(id);
     },[]);
 
-    useEffect(()=>{
+    useEffect(() => {
         const id = updateMoney();
-        return(()=>{
-            clearInterval(id);
-        });
+        return () => clearInterval(id);
     },[]);
 
-    useEffect(()=>{
+    useEffect(() => {
         updateMoneyPerSecond();
     },[gridItems, updateMoneyPerSecond]);
 
-    useEffect(()=>{
-        const id = setInterval(()=>{
+    useEffect(() => {
+        //empty counts store the number of grid items
+        //which are empty. If this changes, then 
+        //auto merge needs to fire
+        //otherwise, this prevents unnecessary merge calcs
+        let nonEmptyCount = getNonEmptySpaces();
+        const id = setInterval(() => {
             if(modifiersRef.current.autoMerge.active){
-                autoMerge();
+                let newEmptyCount = getNonEmptySpaces();
+                if(nonEmptyCount !== newEmptyCount){
+                    autoMerge();
+                    nonEmptyCount = newEmptyCount;
+                }
             }
         },100);
-        return ()=>clearInterval(id);
+        return () => clearInterval(id);
     },[]);
 
     return(

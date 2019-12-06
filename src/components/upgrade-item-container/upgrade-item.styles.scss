@@ -1,9 +1,7 @@
 .upgrade-item{
     display: flex;
     justify-content: space-between;
-    // border: 1px solid red;
     letter-spacing: 1.5px;
-    // background: rgba(0, 0, 0, 0.4);
     &-icon-container{
         border: 2px solid rgb(87, 68, 46);
         border-radius: 50%;
@@ -34,15 +32,11 @@
         justify-content: space-around;
         align-items: center;
         width: 55%;
-        // border: 1px solid yellow;
-        // line-height: 15px;
         text-align: center;
         h5{
-            // border: 1px solid yellow;
             margin-bottom: 4px;
         }
         p{
-            // border:1px solid purple;
             font-size: 80%;
         }
     }
@@ -53,7 +47,6 @@
     justify-content: space-around;
     align-items: center;
     color:white;
-    // border: 1px solid blue;
     background: url('/imgs/button.png');
     background-position: center;
     background-repeat: no-repeat;

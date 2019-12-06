@@ -2,10 +2,10 @@ import React from 'react';
 
 import './custom-text.styles.scss';
 
-const CustomText = ({text}) => {
+const CustomText = ({ text }) => {
     return(
         <div className='custom-text'>
-            <span>{text}</span>
+            <span>{ text }</span>
         </div>
     );
 }
