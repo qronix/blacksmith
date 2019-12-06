@@ -72,9 +72,9 @@ export const formatNumber = num => {
         for(let denom in DENOMS){
             const { value, symbol } = DENOMS[denom];
             let remainder = num / value;
-            if(remainder > 1000 ){
+            if(remainder >= 1000 ){
                 continue;
-            }else if(remainder >= 1 && remainder <= 1000){
+            }else if(remainder >= 1 && remainder < 1000){
                 let formattedValue = `${Math.floor(remainder)} ${symbol}`;
                 return formattedValue;
             } else{

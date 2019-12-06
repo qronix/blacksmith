@@ -49,7 +49,7 @@ const GameProvider = ({ children }) => {
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:1000000000000000,
+        money:999999999999999,
         moneyPerSecond:0,
     });
 
@@ -281,7 +281,7 @@ const GameProvider = ({ children }) => {
     const updateMoneyPerSecond = useCallback(() => {
         let moneyPerSecond = gridItemsRef.current.flat().reduce((acc, current) => acc += items[current].moneyPerSecond, 0);
         setPlayerData(prevPlayerData => {
-            return { ...prevPlayerData, moneyPerSecond:moneyPerSecond*modifiers.moneyPerSecond }
+            return { ...prevPlayerData, moneyPerSecond:moneyPerSecond * modifiers.moneyPerSecond }
         });
     },[items]);
 
