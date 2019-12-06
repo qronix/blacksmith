@@ -12,6 +12,13 @@ const EFFECTS = [
             type:'forgeSpeed',
             increase:0.3
         }
+    },
+    {
+        name: 'Test effect 3',
+        modifier:{
+            type:'autoMerge',
+            increase:1
+        }
     }
 ];
 

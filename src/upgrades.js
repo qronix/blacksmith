@@ -18,6 +18,16 @@ const UPGRADES = [
         effects:[1],
         active:false,
         icon:'/imgs/hm_t_02.png'
+    },
+    {
+        name: 'Golden Anvil',
+        description: 'Items are merged automatically',
+        rank:0,
+        cost:10000000,
+        costDelta:5,
+        effects:[2],
+        active: false,
+        icon:'/imgs/bl_t_01.png'
     }
 ];
 
