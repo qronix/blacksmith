@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, useCallback, useRef} from 'react';
+import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 
 import ITEMS from '../item-data';
 import UPGRADES from '../upgrades';
