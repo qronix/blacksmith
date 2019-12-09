@@ -12,7 +12,7 @@ const InfoContainer = () => {
     const { playerData:{ money, moneyPerSecond } } = useContext(GameContext);
     const formattedMoney = formatNumber(money);
     const formattedMPS = formatNumber(moneyPerSecond);
-
+    
     return(
         <div className='info-container'>
             {/* money */}

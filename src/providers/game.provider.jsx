@@ -40,16 +40,16 @@ const GameProvider = ({ children }) => {
     }
 
     const [gridItems, setGridItems, gridItemsRef] = useCurrentState([
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
-        [0,0,0,0,],
+        [139,139,139,139,],
+        [139,139,139,139,],
+        [139,139,139,139,],
+        [139,139,139,139,],
+        [139,139,139,139,],
+        [139,139,139,139,],
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:0,
+        money:10000000000000000000000000000000000,
         moneyPerSecond:0,
     });
 
