@@ -6,10 +6,12 @@ $height-large:6vh;
 
 .custom-button{
     width: $width;
+    max-width: 100px;
     height: $height;
     text-align: center;
     &-large{
         width:$width-large;
+        max-width: 150px;
         height: $height-large;
         transition: all 30ms;
         &:active{
@@ -23,10 +25,12 @@ $height-large:6vh;
 }
 .custom-button-img{
     width:$width;
+    max-width: 100px;
     height: $height;
 
     &-large{
         width:$width-large;
+        max-width: 150px;
         height: $height-large;
     }
 }
@@ -36,4 +40,19 @@ $height-large:6vh;
     letter-spacing: 0.5px;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
     top:-3.8vh;
+}
+
+@media screen and (orientation: landscape){
+    .custom-button{
+        &-large{
+            width: 10%;
+            height: 10%;
+            border: 1px solid red;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+    }
 }

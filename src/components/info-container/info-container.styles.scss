@@ -43,15 +43,23 @@
     }
 }
 
-// @media screen and (orientation: landscape){
-//     .info-container{
-//         height: 30vh;
-
-//         &-mps{
-//             width: 14%;
-//         }
-//     }       
-// }
+@media screen and (orientation: landscape){
+    .info-container{
+        height: 20%;
+        font-size: 60%;
+        &-mps{
+            width: 14%;
+        }
+        &-coin-money{
+            height: 10px;
+            width: 10px;
+        }
+        &-coin-mps{
+            height: 10px;
+            width: 10px;
+        }
+    }       
+}
 
 // @media (max-width:320px){
 //     .info-container{

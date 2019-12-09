@@ -1,4 +1,11 @@
 .item-grid-row{
     display: flex;
     justify-content: space-between;
+    // border: 1px solid blue;
+}
+
+@media screen and (orientation: landscape){
+    .item-grid-row{
+        justify-content: space-around;
+    }
 }

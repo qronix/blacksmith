@@ -3,6 +3,16 @@
     flex-direction: column;
     // border:1px solid green;
     width: 90vw;
+    max-width: 500px;
     justify-content: space-between;
-    height: 50vh;
+    height: 55%;
+}
+
+@media screen and (orientation: landscape){
+    .item-grid{
+        height: 70%;
+        width: 50%;
+        position: relative;
+        top:-2%;
+    }
 }

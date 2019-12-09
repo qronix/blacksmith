@@ -1,7 +1,7 @@
 .progress-bar{
     height: 10px;
     width: 40%;
-    max-width: 200px;
+    max-width: 150px;
     display: block;
     margin:0 auto;
     border:1px solid green;
@@ -11,5 +11,11 @@
         background-color: #24eda5;
         width:0%;
         height: 7.4px;
+    }
+}
+
+@media screen and (orientation: landscape){
+    .progress-bar{
+        height: 5px;
     }
 }
