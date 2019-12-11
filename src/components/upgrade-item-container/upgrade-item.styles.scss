@@ -1,6 +1,10 @@
 .upgrade-item{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     letter-spacing: 1.5px;
     &-icon-container{
         border: 2px solid rgb(87, 68, 46);
@@ -8,11 +12,21 @@
         height: 45px;
         width: 45px;
         text-align: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-content: center;
-        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        -ms-flex-line-pack: center;
+            align-content: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
         margin-left: 2px;
         span{
             color: white;
@@ -22,15 +36,24 @@
         width: 30px;
         height: 30px;
         margin-top: 20%;
-        filter: brightness(1.8) drop-shadow(1px 3px);
+        -webkit-filter: brightness(1.8) drop-shadow(1px 3px);
+                filter: brightness(1.8) drop-shadow(1px 3px);
     }
 
     &-info{
         color:white;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
         width: 55%;
         text-align: center;
         h5{
@@ -43,9 +66,14 @@
 }
 
 .upgrade-button-container{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     color:white;
     background: url('/imgs/button.png');
     background-position: center;
@@ -54,6 +82,7 @@
     font-size: 90%;
     width: 25%;
     padding-bottom: 4px;
+    -webkit-transition: all 40ms linear;
     transition: all 40ms linear;
 
     img{
@@ -64,6 +93,7 @@
     }
 
     &:active{
-        transform: scale(0.9);
+        -webkit-transform: scale(0.9);
+                transform: scale(0.9);
     }
 }

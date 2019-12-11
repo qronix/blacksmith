@@ -11,7 +11,8 @@
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
-        filter: blur(3px);
+        -webkit-filter: blur(3px);
+                filter: blur(3px);
 
         &-fade{
             position: absolute;
@@ -22,10 +23,21 @@
         }
     }
     height: 100vh;
-    max-height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+    // max-height: 100vh;
+    // width: 100vw;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: space-between;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 10% 70% 15% 5%;
+    grid-template-areas: 
+    "infoContainer"
+    "itemGrid"
+    "forgeButton"
+    "upgradeContainer";
+    // align-content: center;
+    // text-align: center;
+    justify-items: center;
 }

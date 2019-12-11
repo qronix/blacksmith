@@ -1,11 +1,16 @@
 .item-grid-row{
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: 100%;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     // border: 1px solid blue;
 }
 
 @media screen and (orientation: landscape){
     .item-grid-row{
-        justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
     }
 }

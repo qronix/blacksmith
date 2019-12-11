@@ -1,18 +1,21 @@
 .item-grid{
-    display: flex;
-    flex-direction: column;
+    grid-area: itemGrid;
+    display: grid;
+    // grid-template-columns: 100%;
+    grid-template-rows: repeat(6, auto);
+
     // border:1px solid green;
     width: 90vw;
     max-width: 500px;
-    justify-content: space-between;
-    height: 55%;
+    // justify-content: space-between;
+    // height: 60%;
 }
 
-@media screen and (orientation: landscape){
-    .item-grid{
-        height: 70%;
-        width: 50%;
-        position: relative;
-        top:-2%;
-    }
-}
+// @media screen and (orientation: landscape){
+//     .item-grid{
+//         height: 70%;
+//         width: 50%;
+//         position: relative;
+//         top:-2%;
+//     }
+// }

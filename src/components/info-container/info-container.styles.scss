@@ -1,21 +1,36 @@
 .info-container{
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 12%;
-    max-height: 120px;
-    width: 90vw;
+    grid-area: infoContainer;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 35% 40% 10%;
+    grid-template-areas: 
+        "money"
+        "moneyPerSecond"
+        "progress";
+
+    // justify-content: space-between;
+    // height: 12%;
+    // max-height: 120px;
+    width: 90%;
     color:white;
-    text-align: center;
+    // text-align: center;
     text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
     letter-spacing: 1.6px;
     // border: 1px solid red;
+
     &-money{
+        grid-area: money; 
+        display: -webkit-box; 
+        display: -ms-flexbox; 
         display: flex;
-        justify-content: space-around;
+        // justify-content: space-around;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
         margin: 0 auto;
-        padding: 4px;
+        padding: 0.3rem;
         background-color: rgba(94, 47, 9, 0.699);
         border:3px solid rgba(68, 33, 4, 0.973);
         border-bottom-left-radius: 5px;
@@ -23,48 +38,46 @@
     }
 
     &-coin-money{
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: 0.5rem;
     }
 
     &-mps{
+        grid-area: moneyPerSecond;
+        display:-webkit-box;
+        display:-ms-flexbox;
         display:flex;
-        justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
         width: 38%;
         max-width: 130px;
         margin:0 auto;
-        align-items: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
 
     }
     &-coin-mps{
-        width: 14px;
-        height: 14px;
+        width: 0.9rem;
+        height: 0.9rem;
     }
 }
 
-@media screen and (orientation: landscape){
-    .info-container{
-        height: 20%;
-        font-size: 60%;
-        &-mps{
-            width: 14%;
-        }
-        &-coin-money{
-            height: 10px;
-            width: 10px;
-        }
-        &-coin-mps{
-            height: 10px;
-            width: 10px;
-        }
-    }       
-}
-
-// @media (max-width:320px){
+// @media screen and (orientation: landscape){
 //     .info-container{
-//        &-mps{
-//            width: 40vw;
-//        }
-//     }
+//         height: 20%;
+//         font-size: 60%;
+//         &-mps{
+//             width: 14%;
+//         }
+//         &-coin-money{
+//             height: 10px;
+//             width: 10px;
+//         }
+//         &-coin-mps{
+//             height: 10px;
+//             width: 10px;
+//         }
+//     }       
 // }

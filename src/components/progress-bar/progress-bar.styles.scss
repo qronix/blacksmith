@@ -1,8 +1,9 @@
 .progress-bar{
-    height: 10px;
+    height: 0.6rem;
     width: 40%;
     max-width: 150px;
     display: block;
+    grid-area: progress;
     margin:0 auto;
     border:1px solid green;
     margin-bottom: 10px;
@@ -10,12 +11,12 @@
     &-progress{
         background-color: #24eda5;
         width:0%;
-        height: 7.4px;
+        height: 1rem;
     }
 }
 
-@media screen and (orientation: landscape){
-    .progress-bar{
-        height: 5px;
-    }
-}
+// @media screen and (orientation: landscape){
+//     .progress-bar{
+//         height: 5px;
+//     }
+// }
