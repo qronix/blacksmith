@@ -11,7 +11,7 @@ import { GameContext } from '../../providers/game.provider';
 import './game-container.styles.scss';
 
 const GameContainer = () => {
-    const {gridItems, mergeItems, forgeItem, upgradesShown} = useContext(GameContext);
+    const {gridItems, mergeItems, forgeItem, upgradesShown, upgradesRef} = useContext(GameContext);
     return(
         <div className='game-container'>
             <div className='game-container-background'/>
@@ -22,7 +22,7 @@ const GameContainer = () => {
             <CustomButton img='/imgs/forgeButton.png' action={ forgeItem } large/>
             {upgradesShown ?
                 (<CustomModal>
-                    <UpgradeWindow title='Upgrades'/>
+                    <UpgradeWindow title='Upgrades' upgrades={upgradesRef.current}/>
                 </CustomModal>)
                 :
                 null

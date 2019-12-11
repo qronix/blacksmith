@@ -9,6 +9,7 @@ export const GameContext = createContext({
     playerData: {},
     items: [],
     upgrades: [],
+    upgradesRef:null,
     modifiers: {},
     effects: [],
     selectedItem: {},
@@ -57,7 +58,8 @@ const GameProvider = ({ children }) => {
 
     const [items, setItems] = useState(ITEMS);
     
-    const [upgrades, setUpgrades] = useState(UPGRADES);
+    // const [upgrades, setUpgrades] = useState(UPGRADES);
+    const [upgrades, setUpgrades, upgradesRef] = useCurrentState(UPGRADES);
     const [effects, setEffects] = useState(EFFECTS);
     const [modifiers, setModifiers, modifiersRef] = useCurrentState({
         spawnLevel:1,
@@ -260,7 +262,7 @@ const GameProvider = ({ children }) => {
             rank += 1;
             changedUpgrade = { ...changedUpgrade, cost, rank };
             modUpgrades[id] = changedUpgrade;
-            setUpgrades(modUpgrades);
+            setUpgrades([...modUpgrades]);
             processEffects(effects);
         } else{
             console.log('You do not have enough money to purchase this upgrade');
@@ -457,6 +459,8 @@ const GameProvider = ({ children }) => {
                 toggleUpgrades,
                 purchaseUpgrade,
                 modifiers,
+                upgrades,
+                upgradesRef,
             }}
         >
             {children}
