@@ -36,8 +36,8 @@
         width: 30px;
         height: 30px;
         margin-top: 20%;
-        -webkit-filter: brightness(1.8) drop-shadow(1px 3px);
-                filter: brightness(1.8) drop-shadow(1px 3px);
+        -webkit-filter: brightness(1.4); //drop-shadow(1px 3px);
+                filter: brightness(1.4); //drop-shadow(1px 3px);
     }
 
     &-info{
@@ -66,6 +66,8 @@
 }
 
 .upgrade-button-container{
+    user-select: none;
+    cursor: pointer;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -79,16 +81,16 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    font-size: 90%;
+    font-size: 70%;
     width: 25%;
     padding-bottom: 4px;
     -webkit-transition: all 40ms linear;
     transition: all 40ms linear;
 
     img{
-        width: 15px;
-        height: 15px;
-        margin-right: 4px;
+        width: 10px;
+        height: 10px;
+        // margin-right: 2px;
         margin-top: 2px;
     }
 

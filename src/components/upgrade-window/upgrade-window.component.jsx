@@ -2,17 +2,16 @@ import React, { useContext, useMemo } from 'react';
 import uuid from 'uuid';
 
 import { GameContext } from '../../providers/game.provider';
-// import UPGRADES from '../../upgrades';
 import UpgradeItem from '../upgrade-item-container/upgrade-item.component';
 
 import './upgrade-window.styles.scss';
 
 
-const UpgradeWindow = ({ title, upgrades })=> {
+const UpgradeWindow = ({ title })=> {
 
-    const { toggleUpgrades } = useContext(GameContext);
+    const { toggleUpgrades, upgrades } = useContext(GameContext);
 
-    const buildUpgrades = useMemo(() => {
+    const buildUpgrades = () => {
         let upgradeItems = [];
         for(let upgrade in upgrades){
             const { name, description, rank, cost, icon } = upgrades[upgrade];
@@ -20,11 +19,11 @@ const UpgradeWindow = ({ title, upgrades })=> {
             upgradeItems.push(item);
         }
         return upgradeItems;
-    },[upgrades]);
-    
+    };
+
     return(
         <div className='upgrade-window'>
-            <div className='upgrade-window-image'/>
+            {/* <div className='upgrade-window-image'/> */}
             <div className='upgrade-window-header'>
                 <div className='upgrade-window-title'>
                     { title }
@@ -32,7 +31,7 @@ const UpgradeWindow = ({ title, upgrades })=> {
                 <div className='upgrade-window-close' onClick={ toggleUpgrades }/>
             </div>
             <div className='upgrade-window-items'>
-                { buildUpgrades }
+                { buildUpgrades() }
             </div>
         </div>
     );

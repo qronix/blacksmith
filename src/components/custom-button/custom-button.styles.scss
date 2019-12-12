@@ -5,8 +5,10 @@ $height-large:6vh;
 
 
 .custom-button{
+    user-select: none;
     width: $width;
     max-width: 100px;
+    cursor: pointer;
     // height: $height;
     max-height: 40px;
     text-align: center;
