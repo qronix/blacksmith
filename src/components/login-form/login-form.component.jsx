@@ -1,20 +1,20 @@
-import React, {useState, useReducer, useEffect, useRef} from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 
 import uuid from 'uuid';
 import validator from 'email-validator';
-import {createPasswordUser} from '../../firebase/firebase.utils';
+import { createPasswordUser } from '../../firebase/firebase.utils';
 
 import './login-form.styles.scss';
 
 
 
-const LoginForm = ()=>{
+const LoginForm = () => {
     const [formState, setFormState] = useState({
         email: '',
         password: '',
     });
 
-    const reducer = (state, action)=>{
+    const reducer = (state, action) => {
         switch(action.type){
             case 'emailErrorLength':
                 return { ...state, emailErrorLength:action.value }
@@ -22,8 +22,6 @@ const LoginForm = ()=>{
                 return { ...state, emailErrorFormat:action.value }
             case 'passwordError':
                 return { ...state, passwordError:action.value }
-            case 'formError':
-                return { ...state, formError:action.value }
             default:
                 throw new Error();
         }
@@ -41,81 +39,72 @@ const LoginForm = ()=>{
     }
 
     const [formErrors, dispatch] = useReducer(reducer, formErrorsInitial);
-    const formErrorsRef = useRef(formErrors);
-    const [submitEvent, setSubmitEvent] = useState(null);
+    const [formIsValid, setFormIsValid] = useState(true);
 
-    useEffect(()=>{
-        if(submitEvent){
-            console.log(submitEvent);
-            submitEvent.preventDefault();
-            // handleSubmit(submitEvent);
+    useEffect(() => {
+        if(formState.email === '' || formState.password === ''){
+            return;
+        }else{
+            isFormValid();
         }
-    },[formErrors, submitEvent]);
-    const validateInputs = (name, value)=>{
+    },[formErrors]);
+
+    const isFormValid = () => {
+        const formIsValid = Object.keys(formErrors).every(key => formErrors[key] !== true);
+        if(formIsValid){
+            setFormIsValid(true);
+            handleSubmit();
+        }else{
+            setFormIsValid(false);
+        }
+    }
+    const validateInputs = (name, value) => {
         switch(name){
             case 'email':
-                if(value.length===0){
+                if(value.length === 0){
                     dispatch({ type: 'emailErrorLength', value: true });
-                    dispatch({ type: 'formError', value: true });
                 }else{
                     dispatch({ type: 'emailErrorLength', value: false });
-                    dispatch({ type: 'formError', value: false });
                 }
-                if(value.length>0){
+                if(value.length > 0){
                     const validEmail = validator.validate(value);
                     if(validEmail){
                         dispatch({ type: 'emailErrorFormat', value: false });
-                        dispatch({ type: 'formError', value: false });
                     }else{
                         dispatch({ type: 'emailErrorFormat', value: true });
-                        dispatch({ type: 'formError', value: true });
                     }
                 }
                 break;
             case 'password':
                 if(value.length < 6){
                     dispatch({ type: 'passwordError', value: true });
-                    dispatch({ type: 'formError', value:true });
                 }else{
                     dispatch({ type: 'passwordError', value:false });
-                    dispatch({ type: 'formError', value:false });
                 }
                 break;
             default:
                 throw new Error();
         }
     }
-    const handleChange = ({ target })=>{
+    const handleChange = ({ target }) => {
         const { name, value } = target;
         setFormState({ ...formState, [name]: value });
     }
-    const showEvent = (e=>{
+    const validateForm = e => {
         e.preventDefault();
-        console.log('Event: ', e);
-    });
-    const handleSubmit = (e => {
-        e.preventDefault();
-        console.log('Formerrors: ', formErrors);
-        console.log('Formerrorsref: ', formErrorsRef);
         Object.keys(formState).forEach(key => {
             validateInputs(key, formState[key]);
         });
-        console.log('formerror: ', formErrors.formError);
-        const errors = Object.keys(formErrors).some(key=>key===true);
-        if(formErrors.formError){
-            return;
-        }else{
-            console.log('Form errors: ', errors);
-            const { email, password } = formState;
-            createPasswordUser(email, password);
-        }
-    });
-
-    const constructFormError = ()=>{
+    };
+    const handleSubmit = () => {
+        const { email, password } = formState;
+        createPasswordUser(email, password);
+    };
+    const constructFormError = () => {
         let errors = [];
-        Object.keys(formErrors).forEach(key=>{
+        Object.keys(formErrors).forEach(key => {
             if(formErrors[key] === true && key !== 'formError'){
-                let error = <div key={uuid()}>{formErrorMsgs[key]}</div>;
+                let error = <div key={ uuid() }>{ formErrorMsgs[key] }</div>;
                 errors.push(error);
             }
         });
@@ -123,7 +112,7 @@ const LoginForm = ()=>{
     }
     return(
         <div className='login-form'>
-            <form >
+            <form onSubmit={ validateForm }>
                 <div className='email-container'>
                     <label htmlFor='email'>Username:</label>
                     <input id={ 'email' } type='text' name='email' onChange={ handleChange } className={ (formErrors.emailErrorLength || formErrors.emailErrorFormat ? 'error' : null) } required/>
@@ -132,10 +121,10 @@ const LoginForm = ()=>{
                     <label htmlFor='password'>Password:</label>
                     <input id={ 'password' } type='password' onChange={ handleChange } name='password' className={ (formErrors.passwordError ? 'error' : null) } required/>
                 </div>
-                <button type='submit' onClick={setSubmitEvent}>Login</button>
+                <button type='submit'>Login</button>
             </form>
             <div className='form-errors'>
-                {constructFormError()}
+                { (!formIsValid) ? constructFormError() : null }
             </div>
         </div>
     );
