@@ -21,7 +21,7 @@ const config = {
     if(user){
       console.log('User is signed in');
     }else{
-      console.log('No use is signed in');
+      console.log('No user is signed in');
     }
   });
 
