@@ -1,27 +1,34 @@
 import React, { useState, useReducer, useEffect } from 'react';
-
 import uuid from 'uuid';
 import validator from 'email-validator';
-import { createPasswordUser } from '../../firebase/firebase.utils';
 
-import './login-form.styles.scss';
+import { registerPasswordUser } from '../../api/api';
+import { loginPasswordUser } from '../../firebase/firebase.utils';
+
+import './login-register-form.styles.scss';
 
 
+const LoginForm = ({ showLogin }) => {
 
-const LoginForm = () => {
-    const [formState, setFormState] = useState({
+    const formInitialState = {
         email: '',
         password: '',
-    });
+        confirmPassword: '',
+    };
 
+    const [formState, setFormState] = useState(formInitialState);
     const reducer = (state, action) => {
         switch(action.type){
             case 'emailErrorLength':
                 return { ...state, emailErrorLength:action.value }
             case 'emailErrorFormat':
                 return { ...state, emailErrorFormat:action.value }
+            case 'passwordErrorLength':
+                return { ...state, passwordErrorLength:action.value }
             case 'passwordError':
                 return { ...state, passwordError:action.value }
+            case 'confirmPasswordError':
+                return { ...state, confirmPasswordError:action.value }
             default:
                 throw new Error();
         }
@@ -29,13 +36,17 @@ const LoginForm = () => {
     const formErrorsInitial = {
         emailErrorLength: false,
         emailErrorFormat: false,
+        passwordErrorLength: false,
         passwordError: false,
+        confirmPasswordError: false,
         formError: false
     }
     const formErrorMsgs = {
         emailErrorLength: "Email is required.",
         emailErrorFormat: "Please enter a valid email.",
-        passwordError: "Password is required."
+        passwordErrorLength: "Password must be at least 6 characters.",
+        passwordError: "Password is required.",
+        confirmPasswordError: "Passwords do not match.",
     }
 
     const [formErrors, dispatch] = useReducer(reducer, formErrorsInitial);
@@ -48,6 +59,10 @@ const LoginForm = () => {
             isFormValid();
         }
     },[formErrors]);
+
+    const clearForm = () => {
+        setFormState(formInitialState);
+    }
 
     const isFormValid = () => {
         const formIsValid = Object.keys(formErrors).every(key => formErrors[key] !== true);
@@ -76,10 +91,24 @@ const LoginForm = () => {
                 }
                 break;
             case 'password':
-                if(value.length < 6){
-                    dispatch({ type: 'passwordError', value: true });
+                if(value.length === 0){
+                    dispatch({ type: 'passwordError', value: true});
+                }
+                else if(value.length < 6){
+                    dispatch({ type: 'passwordErrorLength', value: true });
                 }else{
+                    dispatch({ type: 'passwordErrorLength', value: false });
                     dispatch({ type: 'passwordError', value:false });
+                }
+                break;
+            case 'confirmPassword':
+                if(showLogin) break;
+                if(value !== formState.password){
+                    console.log('Password: ', formState.password);
+                    console.log('Confirm: ', value);
+                    dispatch({type: 'confirmPasswordError', value:true });
+                }else{
+                    dispatch({type: 'confirmPasswordError', value:false });
                 }
                 break;
             default:
@@ -96,9 +125,20 @@ const LoginForm = () => {
             validateInputs(key, formState[key]);
         });
     };
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const { email, password } = formState;
-        createPasswordUser(email, password);
+        if(showLogin){
+            //TODO: handle login
+            const response = await loginPasswordUser({email, password});
+        }else{
+            try{
+                const response = await registerPasswordUser({ email, password });
+                console.log('Got response: ', response);
+            }catch(err){
+                console.log('An error occurred');
+            }
+        }
+        clearForm();
     };
     const constructFormError = () => {
         let errors = [];
@@ -115,13 +155,20 @@ const LoginForm = () => {
             <form onSubmit={ validateForm }>
                 <div className='email-container'>
                     <label htmlFor='email'>Username:</label>
-                    <input id={ 'email' } type='text' name='email' onChange={ handleChange } className={ (formErrors.emailErrorLength || formErrors.emailErrorFormat ? 'error' : null) } required/>
+                    <input id={ 'email' } type='text' name='email' onChange={ handleChange } className={ (formErrors.emailErrorLength || formErrors.emailErrorFormat ? 'error' : null) } value={ formState.email } required/>
                 </div>
                 <div className='password-container'>
                     <label htmlFor='password'>Password:</label>
-                    <input id={ 'password' } type='password' onChange={ handleChange } name='password' className={ (formErrors.passwordError ? 'error' : null) } required/>
+                    <input id={ 'password' } type='password' onChange={ handleChange } name='password' className={ (formErrors.passwordError || formErrors.passwordErrorLength ? 'error' : null) } value={ formState.password } required/>
                 </div>
-                <button type='submit'>Login</button>
+                {(!showLogin) ? 
+                    <div className='passwordConfirm-container'>
+                        <label htmlFor = 'passwordConfirm'>Confirm password:</label>
+                        <input id={ 'confirmPassword' } type='password' onChange={ handleChange } name='confirmPassword' className={ (formErrors.confirmPasswordError ? 'error' : null)} value={formState.confirmPassword} required />
+                    </div>
+                    : null
+                }
+                <button type='submit'>{ (showLogin ? 'Login' : 'Register') }</button>
             </form>
             <div className='form-errors'>
                 { (!formIsValid) ? constructFormError() : null }

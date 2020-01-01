@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+
 const config = {
     apiKey: "AIzaSyD8Xnzg5ijSzQvy8AmRbSFAhDKd1VjSkQc",
     authDomain: "blacksmith-ed73e.firebaseapp.com",
@@ -14,7 +15,7 @@ const config = {
 
   firebase.initializeApp(config);
 
-  const user = null;
+  // const user = null;
 
   //auth observer
   firebase.auth().onAuthStateChanged(user=>{
@@ -25,20 +26,20 @@ const config = {
     }
   });
 
- export const createPasswordUser = async (email, password)=>{
-   console.log('Email: ', email);
-   console.log('Password: ', password);
-    if(email && password){
+
+
+
+
+  export const loginPasswordUser = async ({email, password}) =>{
+    try{
+      const user = await firebase.auth().signInWithEmailAndPassword(email, password);
       try{
-        const status = await firebase.auth().createUserWithEmailAndPassword(email,password);
-        console.log('Create user status: ', status);
+        const TOKEN = await firebase.auth().currentUser.getIdToken(true);
+        console.log('Got TOKEN: ', TOKEN);
       }catch(err){
-        console.log('Create user error: ', err);
+        console.log('Token error!', err.message);
       }
-    }else{
-      console.log('Invalid data');
+    }catch(err){
+      console.log('An error occurred: ', err);
     }
   }
-
-
-

@@ -6,7 +6,7 @@ import GameProvider from './providers/game.provider';
 import GameContainer from './components/game-container/game-container.component';
 
 import HomePage from './pages/homepage/homepage.component';
-import LoginPage from './pages/loginpage/loginpage.component';
+import LoginRegisterPage from './pages/login-register-page/login-register-page.component';
 import Navbar from './components/navbar/navbar-component';
 
 
@@ -21,7 +21,7 @@ const App = () => {
             <Navbar/>
             <Switch>
                 <Route exact path='/login'>
-                    <LoginPage/>
+                    <LoginRegisterPage/>
                 </Route>
                 <Route path="/">
                     <HomePage/>
