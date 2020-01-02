@@ -1,7 +1,13 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import { useContext } from 'react';
+
 import { loginUser } from '../api/api';
+
+import { UserContext } from '../providers/user.provider';
+
+const { updateUser } = useContext(UserContext);
 
 const config = {
     apiKey: "AIzaSyD8Xnzg5ijSzQvy8AmRbSFAhDKd1VjSkQc",
@@ -16,10 +22,10 @@ const config = {
 
   firebase.initializeApp(config);
 
-  // const user = null;
 
   //auth observer
   firebase.auth().onAuthStateChanged(user=>{
+    updateUser(user);
     if(user){
       console.log('User is signed in');
     }else{

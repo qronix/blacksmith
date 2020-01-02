@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect, useContext } from 'react';
 import uuid from 'uuid';
 import validator from 'email-validator';
 import { withRouter } from 'react-router-dom';
@@ -16,7 +16,7 @@ const LoginForm = ({ showLogin, history }) => {
         password: '',
         confirmPassword: '',
     };
-    // const abortController = new AbortController();
+    
 
     const [formState, setFormState] = useState(formInitialState);
     const reducer = (state, action) => {
@@ -60,9 +60,9 @@ const LoginForm = ({ showLogin, history }) => {
         }else{
             isFormValid();
         }
-        return(()=>{
-            // abortController.abort();
-        });
+        // return(()=>{
+        //     // abortController.abort();
+        // });
     },[formErrors]);
 
 
