@@ -9,6 +9,7 @@
     "firebase": "^7.6.1",
     "firebase-admin": "^8.9.0",
     "firebaseui": "^4.4.0",
+    "history": "^4.10.1",
     "node-sass": "^4.13.0",
     "react": "^16.11.0",
     "react-dnd": "^9.4.0",

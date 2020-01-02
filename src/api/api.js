@@ -13,8 +13,16 @@ export const registerPasswordUser = async ({ email, password }) => {
 
 // };
 
-export const loginUser = async token => {
-    
+export const loginUser = async TOKEN => {
+    console.log(TOKEN);
+    try{
+        const response = await axios.post('/loginWithCreds',{TOKEN});
+        console.log('API response: ', response);
+        const { data, status } = response;
+        return { data, status };
+    }catch(err){
+        return false;
+    }
 };
 
 export const sendUserToken = async token => {

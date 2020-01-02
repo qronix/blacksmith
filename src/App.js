@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { createBrowserHistory } from 'history'
 
 import GameProvider from './providers/game.provider';
 import GameContainer from './components/game-container/game-container.component';
@@ -13,11 +14,12 @@ import Navbar from './components/navbar/navbar-component';
 import './app.styles.scss';
 
 const App = () => {
+    const history = createBrowserHistory();
     return(
         // <GameProvider>
         //     <GameContainer/>
         // </GameProvider>
-        <Router>
+        <Router history={ history }>
             <Navbar/>
             <Switch>
                 <Route exact path='/login'>

@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import { loginUser } from '../api/api';
 
 const config = {
     apiKey: "AIzaSyD8Xnzg5ijSzQvy8AmRbSFAhDKd1VjSkQc",
@@ -35,7 +36,9 @@ const config = {
       const user = await firebase.auth().signInWithEmailAndPassword(email, password);
       try{
         const TOKEN = await firebase.auth().currentUser.getIdToken(true);
-        console.log('Got TOKEN: ', TOKEN);
+        const response = await loginUser(TOKEN);
+        const { data, status } = response;
+        return {data, status};
       }catch(err){
         console.log('Token error!', err.message);
       }

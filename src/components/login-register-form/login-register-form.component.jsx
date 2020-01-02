@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useEffect } from 'react';
 import uuid from 'uuid';
 import validator from 'email-validator';
+import { withRouter } from 'react-router-dom';
 
 import { registerPasswordUser } from '../../api/api';
 import { loginPasswordUser } from '../../firebase/firebase.utils';
@@ -8,13 +9,14 @@ import { loginPasswordUser } from '../../firebase/firebase.utils';
 import './login-register-form.styles.scss';
 
 
-const LoginForm = ({ showLogin }) => {
+const LoginForm = ({ showLogin, history }) => {
 
     const formInitialState = {
         email: '',
         password: '',
         confirmPassword: '',
     };
+    // const abortController = new AbortController();
 
     const [formState, setFormState] = useState(formInitialState);
     const reducer = (state, action) => {
@@ -58,7 +60,11 @@ const LoginForm = ({ showLogin }) => {
         }else{
             isFormValid();
         }
+        return(()=>{
+            // abortController.abort();
+        });
     },[formErrors]);
+
 
     const clearForm = () => {
         setFormState(formInitialState);
@@ -129,7 +135,16 @@ const LoginForm = ({ showLogin }) => {
         const { email, password } = formState;
         if(showLogin){
             //TODO: handle login
-            const response = await loginPasswordUser({email, password});
+            try{
+                const response = await loginPasswordUser({email, password});
+                if(response.status === 200){
+                    return history.push('/');
+                }else{
+                    throw new Error(response.data);
+                }
+            }catch(err){
+                console.log('An error occurred', err.message);
+            }
         }else{
             try{
                 const response = await registerPasswordUser({ email, password });
@@ -177,4 +192,4 @@ const LoginForm = ({ showLogin }) => {
     );
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);
