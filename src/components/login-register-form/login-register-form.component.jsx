@@ -1,16 +1,16 @@
-import React, { useState, useReducer, useEffect, useContext } from 'react';
+import React, { useState, useReducer, useEffect, } from 'react';
 import uuid from 'uuid';
 import validator from 'email-validator';
 import { withRouter } from 'react-router-dom';
 
 import { registerPasswordUser } from '../../api/api';
-import { loginPasswordUser } from '../../firebase/firebase.utils';
+// import { loginPasswordUser } from '../../firebase/firebase.utils';
+import { withFirebase } from '../firebase/index';
 
 import './login-register-form.styles.scss';
 
 
-const LoginForm = ({ showLogin, history }) => {
-
+const LoginForm = ({ showLogin, history, firebase }) => {
     const formInitialState = {
         email: '',
         password: '',
@@ -60,9 +60,6 @@ const LoginForm = ({ showLogin, history }) => {
         }else{
             isFormValid();
         }
-        // return(()=>{
-        //     // abortController.abort();
-        // });
     },[formErrors]);
 
 
@@ -136,7 +133,7 @@ const LoginForm = ({ showLogin, history }) => {
         if(showLogin){
             //TODO: handle login
             try{
-                const response = await loginPasswordUser({email, password});
+                const response = await firebase.doSignInWithEmailAndPassword(email, password);
                 if(response.status === 200){
                     return history.push('/');
                 }else{
@@ -192,4 +189,4 @@ const LoginForm = ({ showLogin, history }) => {
     );
 }
 
-export default withRouter(LoginForm);
+export default withRouter(withFirebase(LoginForm));

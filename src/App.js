@@ -6,7 +6,6 @@ import { createBrowserHistory } from 'history'
 import GameProvider from './providers/game.provider';
 import GameContainer from './components/game-container/game-container.component';
 
-import { UserContext } from './providers/user.provider';
 
 import HomePage from './pages/homepage/homepage.component';
 import LoginRegisterPage from './pages/login-register-page/login-register-page.component';
@@ -17,7 +16,6 @@ import Navbar from './components/navbar/navbar-component';
 import './app.styles.scss';
 
 const App = () => {
-    const { user } = useContext(UserContext);
     const history = createBrowserHistory();
     return(
         // <GameProvider>

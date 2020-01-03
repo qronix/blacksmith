@@ -2,6 +2,7 @@ import React from 'react';
 
 import LoginRegisterContainer from '../../components/login-register-container/login-register-container.component';
 
+// import { withFirebase } from '../../components/'
 
 import './login-register-page.styles.scss';
 
