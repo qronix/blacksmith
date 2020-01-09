@@ -1,29 +1,19 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 
-import { loginUser } from '../../api/api';
+import { verifyToken } from '../../api/api';
 import firebaseConfig from './firebaseConfig';
 
   class Firebase{
       constructor(){
           app.initializeApp(firebaseConfig);
           this.auth = app.auth();
-          this.state = {
-              user: null,
-          };
+        //   this.user = null;
+        //   app.auth().onAuthStateChanged(user=>{
+        //       user ? this.user = user : this.user = null
+        //   });
       }
-
-      componentDidMount(){
-          this.listener = this.auth.onAuthStateChanged(authUser => {
-              authUser 
-              ? this.setState({ authUser })
-              : this.setState({ authUser: null});
-          });
-      }
-      //Auth API
-      componentWillUnmount(){
-          this.listener();
-      }
+     
       doCreateUserWithEmailAndPassword = async (email, password) => {
           const response = await this.auth.createUserWithEmailAndPassword(email, password);
       }
@@ -31,8 +21,9 @@ import firebaseConfig from './firebaseConfig';
       doSignInWithEmailAndPassword = async (email, password)=>{
           const user = await this.auth.signInWithEmailAndPassword(email, password);
           try{
+              console.log('User: ', this.auth.currentUser);
               const TOKEN = await this.auth.currentUser.getIdToken(true);
-              const response = await loginUser(TOKEN);
+              const response = await verifyToken(TOKEN);
               const { data, status } = response;
               return { data, status };
           }catch(err){
@@ -41,6 +32,28 @@ import firebaseConfig from './firebaseConfig';
       }
 
       doSignOut = () => this.auth.signOut();
+
+      doVerifyUser = async () => {
+          try{
+            //   console.log('User: ', this.auth.currentUser);
+              const TOKEN = await this.auth.currentUser.getIdToken(true);
+            //   console.log('TOKEN: ', TOKEN);
+              const response = await verifyToken(TOKEN);
+            //   console.log('TOKEN RESPONSE: ', response);
+              const { status } = response;
+              if(status === 200){
+                  return true;
+              }else{
+                  return false;
+              }
+          }catch(err){
+              console.log('Err: ', err.message);
+              return false;
+          }
+      };
+      getCurrentUser = async () => {
+          return this.auth.currentUser;
+      }
 
       //TODO:
       //doPasswordReset

@@ -13,10 +13,10 @@ export const registerPasswordUser = async ({ email, password }) => {
 
 // };
 
-export const loginUser = async TOKEN => {
-    console.log(TOKEN);
+export const verifyToken = async TOKEN => {
+    // console.log(TOKEN);
     try{
-        const response = await axios.post('/loginWithCreds',{TOKEN});
+        const response = await axios.post('/verifytoken',{TOKEN});
         console.log('API response: ', response);
         const { data, status } = response;
         return { data, status };
