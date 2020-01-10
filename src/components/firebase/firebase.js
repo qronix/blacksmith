@@ -31,13 +31,21 @@ import firebaseConfig from './firebaseConfig';
           }
       }
 
-      doSignOut = () => this.auth.signOut();
+      doSignOut = async () => {
+          try{
+              await this.auth.signOut();
+              return true;
+            }catch(err){
+                return false;
+            }
+        };
 
       doVerifyUser = async () => {
           try{
             //   console.log('User: ', this.auth.currentUser);
               const TOKEN = await this.auth.currentUser.getIdToken(true);
             //   console.log('TOKEN: ', TOKEN);
+              console.log('Verifying user');
               const response = await verifyToken(TOKEN);
             //   console.log('TOKEN RESPONSE: ', response);
               const { status } = response;

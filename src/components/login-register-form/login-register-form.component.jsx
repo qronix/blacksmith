@@ -4,9 +4,6 @@ import validator from 'email-validator';
 import { withRouter, Redirect } from 'react-router-dom';
 
 import { registerPasswordUser } from '../../api/api';
-// import { loginPasswordUser } from '../../firebase/firebase.utils';
-// import { withFirebase } from '../firebase/index';
-import { withAuthentication } from '../session';
 import './login-register-form.styles.scss';
 import { withFirebase } from '../firebase';
 
@@ -135,11 +132,7 @@ const LoginForm = ({ showLogin, history, firebase }) => {
             //TODO: handle login
             try{
                 const response = await firebase.doSignInWithEmailAndPassword(email, password);
-                if(response.status === 200){
-                    firebase.doVerifyUser();
-                }else{
-                    throw new Error(response.data);
-                }
+                return (response.status === 200 ) ? history.push('/game') : null
             }catch(err){
                 console.log('An error occurred', err.message);
             }

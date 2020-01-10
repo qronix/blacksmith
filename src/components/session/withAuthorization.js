@@ -17,7 +17,7 @@ const withAuthorization = Component => {
                         if(!response){
                             this.props.history.push('/login');
                         }else{
-                            this.setState({authed: true}, ()=>console.log('withAuth updated'));
+                            this.setState({authed: true});
                         }
                     }
                     checkAuth();

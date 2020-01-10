@@ -2,7 +2,7 @@ import React from 'react';
 
 import './gamepage.styles.scss';
 
-import withAuthorization from '../../components/withAuthorization/withAuthorization';
+import withAuthorization from '../../components/session/withAuthorization';
 
 const GamePage = () => {
     console.log('Game page!');
