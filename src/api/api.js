@@ -5,7 +5,7 @@ export const registerPasswordUser = async ({ email, password }) => {
         const response = await axios.post('/register',{ email, password });
         return response.data;
     }catch(err){
-        return new Promise((res,rej)=>{rej(false)});
+        return false;
     }
 };
 

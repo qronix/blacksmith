@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import { Redirect } from 'react-router-dom';
 import { withAuthorization, UserContext } from '../../components/session';
 
+import { NetworkContext } from '../../network/network';
 
 const LogoutPage = props =>  {
 
     const [isLoggedOut, setIsLoggedOut] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-
+    const { doDisconnect } = useContext(NetworkContext);
     useEffect(()=>{
         const doLogout = async () => {
             try{
@@ -22,7 +23,15 @@ const LogoutPage = props =>  {
         }
         setIsMounted(true);
         doLogout();
-        return setIsMounted(false);
+
+        return () => {
+            setIsMounted(false);
+        };
+    },[]);
+
+    useEffect(()=>{
+        console.log('Disconnecting!');
+        doDisconnect();
     },[]);
 
 

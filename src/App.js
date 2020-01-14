@@ -7,7 +7,7 @@ import LoginRegisterPage from './pages/login-register-page/login-register-page.c
 import LogoutPage from './pages/logoutpage/logoutpage.component';
 import GamePage from './pages/gamepage/gamepage.component';
 import Navbar from './components/navbar/navbar-component';
-
+import NetworkProvider from './network/network';
 
 import './app.styles.scss';
 
@@ -21,16 +21,17 @@ const App =  () => {
             <Navbar/>
             <Switch>
                 <Route exact path ='/game'>
-                    <GamePage/>
+                    <NetworkProvider>
+                        <GamePage/>
+                    </NetworkProvider>
                 </Route>
                 <Route exact path='/login'>
                     <LoginRegisterPage/>
                 </Route>
                 <Route exact path='/logout'>
-                    <LogoutPage/>
-                </Route>
-                <Route exact path='/game'>
-                    <GamePage/>
+                    <NetworkProvider>
+                        <LogoutPage/>
+                    </NetworkProvider>
                 </Route>
                 <Route path="/">
                     <HomePage/>
