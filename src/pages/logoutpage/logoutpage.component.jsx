@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 
-import { Redirect } from 'react-router-dom';
-import { withAuthorization, UserContext } from '../../components/session';
+import { withAuthorization, } from '../../components/session';
 
 import { NetworkContext } from '../../network/network';
 
@@ -10,7 +9,7 @@ const LogoutPage = props =>  {
     const [isLoggedOut, setIsLoggedOut] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const { doDisconnect } = useContext(NetworkContext);
-    useEffect(()=>{
+    useEffect(() => {
         const doLogout = async () => {
             try{
                 await props.firebase.doSignOut();
@@ -29,8 +28,7 @@ const LogoutPage = props =>  {
         };
     },[]);
 
-    useEffect(()=>{
-        console.log('Disconnecting!');
+    useEffect(() => {
         doDisconnect();
     },[]);
 

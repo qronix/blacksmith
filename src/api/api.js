@@ -25,6 +25,17 @@ export const verifyToken = async TOKEN => {
     }
 };
 
+export const login = async TOKEN => {
+    try{
+        const response = await axios.post('/login', {TOKEN});
+        console.log('API (LOGIN) response: ', response);
+        const { data, status } = response;
+        return { data, status };
+    }catch(err){
+        return false;
+    }
+}
+
 export const sendUserToken = async token => {
 
 };

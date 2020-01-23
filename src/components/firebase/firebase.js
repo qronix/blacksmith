@@ -1,7 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 
-import { verifyToken } from '../../api/api';
+import { verifyToken, login } from '../../api/api';
 import firebaseConfig from './firebaseConfig';
 
   class Firebase{
@@ -23,7 +23,7 @@ import firebaseConfig from './firebaseConfig';
           try{
               console.log('User: ', this.auth.currentUser);
               const TOKEN = await this.auth.currentUser.getIdToken(true);
-              const response = await verifyToken(TOKEN);
+              const response = await login(TOKEN);
               const { data, status } = response;
               return { data, status };
           }catch(err){

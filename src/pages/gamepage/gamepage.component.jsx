@@ -2,18 +2,18 @@ import React, { useContext } from 'react';
 
 import './gamepage.styles.scss';
 
-import { NetworkContext } from '../../network/network';
+// import { NetworkContext } from '../../network/network';
 
-// import socket from '../../network/network';
+import {connect} from '../../network/socket';
+
 
 import withAuthorization from '../../components/session/withAuthorization';
 
 const GamePage = () => {
 
-    const {doConnect} = useContext(NetworkContext);
-    console.log('Starting socket!');
-    // socket.connect();
-    doConnect();
+    // const { doConnect } = useContext(NetworkContext);
+    // doConnect();
+    connect();
     return(
         <div className='gamepage'>
             <h1>GAME PAGE!</h1>

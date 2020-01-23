@@ -14,9 +14,6 @@ import './app.styles.scss';
 const App =  () => {
 
     return(
-        // <GameProvider>
-        //     <GameContainer/>
-        // </GameProvider>
         <Router>
             <Navbar/>
             <Switch>
