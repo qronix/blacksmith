@@ -28,8 +28,15 @@ export const verifyToken = async TOKEN => {
 export const login = async TOKEN => {
     try{
         const response = await axios.post('/login', {TOKEN});
+        console.log('TOKEN: ', TOKEN);
         console.log('API (LOGIN) response: ', response);
         const { data, status } = response;
+        //destructure sessionID and token
+        //store in local storage
+        console.log('Response data: ' , data);
+        const { sessionID, token } = data.content;
+        localStorage.setItem('blacksmith-sessionID', sessionID );
+        localStorage.setItem('blacksmith-token', token);
         return { data, status };
     }catch(err){
         return false;
