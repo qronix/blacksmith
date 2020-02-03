@@ -6,8 +6,8 @@ import { compareArrays, formatNumber } from '../../utils/utils';
 import './item-container.styles.scss';
 
 const ItemContainer = ({ rowId, rowItemId }) => {
-
     const { mergeItems, getItemInfo, selectedItem:{gridId, itemName} } = useContext(GameContext);
+    
     const handleClick = () => {
         mergeItems([rowId, rowItemId]);
     }

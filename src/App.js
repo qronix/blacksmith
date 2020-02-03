@@ -18,9 +18,7 @@ const App =  () => {
             <Navbar/>
             <Switch>
                 <Route exact path ='/game'>
-                    <NetworkProvider>
-                        <GamePage/>
-                    </NetworkProvider>
+                    <GamePage/>
                 </Route>
                 <Route exact path='/login'>
                     <LoginRegisterPage/>

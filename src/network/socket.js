@@ -3,12 +3,12 @@ import io from 'socket.io-client';
 let socket;
 
 let connections = [];
-// socket.connect(socket=>{
-//     socket.on('disconnect', ()=>console.log('disconnected homie'));
-//     socket.on('hey', (msg)=>console.log(msg));
-// });
-// socket.on('hey', (msg)=>console.log(msg));
 
+let GAME_STATE = {};
+
+export const getGameState = () => {
+    return { ...GAME_STATE };
+}
 
 export const connect = () => {
     if(connections.length === 0){
@@ -26,7 +26,11 @@ export const connect = () => {
             }
         });
         socket.on('Authorized', msg => console.log(msg));
-        socket.on('initialize', msg => console.log('Received game data: ', msg));
+        socket.on('initialize', msg => {
+            GAME_STATE = { ...JSON.parse(msg) };
+            console.log('Game state: ', GAME_STATE);
+        });
+
         let connection = socket.open();
         connections.push(connection);
     }else{
