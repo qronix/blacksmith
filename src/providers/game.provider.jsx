@@ -1,8 +1,16 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 
+import io from 'socket.io-client';
+
+import mergeArrayOfObjects, { mergeArraysOfObjects } from '../utils/utils';
+
 import ITEMS from '../item-data';
 import UPGRADES from '../upgrades';
 import EFFECTS from '../effects';
+
+let connected = false;
+
+let socket;
 
 export const GameContext = createContext({
     gridItems: [],
@@ -41,16 +49,16 @@ const GameProvider = ({ children }) => {
     }
 
     const [gridItems, setGridItems, gridItemsRef] = useCurrentState([
-        [139,139,139,139,],
-        [139,139,139,139,],
-        [139,139,139,139,],
-        [139,139,139,139,],
-        [139,139,139,139,],
-        [139,139,139,139,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
+        [0,0,0,0,],
     ]);
 
     const [playerData, setPlayerData] = useState({
-        money:10000000000000000000000000000000000,
+        money:0,
         moneyPerSecond:0,
     });
 
@@ -176,7 +184,7 @@ const GameProvider = ({ children }) => {
                     setModifiers({ ...modifiersRef.current, forgeSpeed:modifiersRef.current.forgeSpeed += increase });
                     break;
                 case 'autoMerge':
-                    setModifiers({...modifiersRef.current, autoMerge:{...modifiersRef.current.autoMerge, active:true}});
+                    setModifiers({...modifiersRef.current, autoMerge:{ ...modifiersRef.current.autoMerge, active:true }});
                     break;
                 default:
                     break;
@@ -307,6 +315,7 @@ const GameProvider = ({ children }) => {
                         //reset forge so the next item
                         //can begin forging
                         setCurrentForgeProgress(0);
+                        socket.emit('addItem');
                         return setGridItems(() => {
                             let grid = [...gridItemsRef.current];
                             grid[i][j] = modifiersRef.current.spawnLevel;
@@ -322,6 +331,7 @@ const GameProvider = ({ children }) => {
         const id = setInterval(() => {
             setPlayerData(prevPlayerData => {
                 const { money, moneyPerSecond } = prevPlayerData;
+                socket.emit('updateMoney', `${money+moneyPerSecond}`);
                 return { ...prevPlayerData, money:money+moneyPerSecond }
             });
         },1000);
@@ -412,6 +422,7 @@ const GameProvider = ({ children }) => {
         }
     }
 
+
     useEffect(() => {
         const id = runForge();
         return () => clearInterval(id);
@@ -442,6 +453,50 @@ const GameProvider = ({ children }) => {
             }
         },100);
         return () => clearInterval(id);
+    },[]);
+
+    useEffect(() => {
+        if(!connected){
+            socket = io('http://localhost:3001');
+            socket.on('connect', () => {
+                console.log('Connected to server');
+                connected = true;
+            });
+            socket.on('disconnect', () => {
+                console.log('Disconnected from server');
+                connected = false;
+            });
+            socket.on('identify', () => {
+                const sessionID = window.localStorage.getItem('blacksmith-sessionID');
+                const token = window.localStorage.getItem('blacksmith-token');
+                if(sessionID && token){
+                    socket.emit('identity', JSON.stringify({ sessionID, token }));
+                }else{
+                    socket.disconnect();
+                }
+            });
+            socket.on('Authorized', msg => console.log(msg));
+            socket.on('initialize', msg => {
+                const GAME_DATA = JSON.parse(msg);
+                const {
+                    gridItems,
+                    playerData,
+                    modifiers,
+                    currentForgeProgress,
+                    upgrades:upgradeData
+                } = GAME_DATA;
+
+                setGridItems([...gridItems]);
+                setPlayerData({ ...playerData });
+                setModifiers({ ...modifiers });
+                setCurrentForgeProgress(currentForgeProgress);
+                const mergedUpgrades = mergeArraysOfObjects(upgrades, upgradeData);
+                setUpgrades(mergedUpgrades);
+            });
+
+            socket.open();
+        }
+        return ()=>{socket.disconnect()};
     },[]);
 
     return(

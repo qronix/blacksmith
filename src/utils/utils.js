@@ -14,6 +14,14 @@ export const compareArrays = (arr1, arr2) => {
     }
 }
 
+export const mergeArraysOfObjects = (arr1, arr2) => {
+    const mergedArray = arr1.map((item, idx) => {
+        let mergedObject = {...item, ...arr2[idx] };
+        return mergedObject;
+    });
+    return mergedArray;
+}
+
 export const formatNumber = num => {
     const DENOMS = [
         {
