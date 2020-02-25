@@ -85,6 +85,8 @@ const GameProvider = ({ children }) => {
     });
     const[currentForgeProgress, setCurrentForgeProgress] = useState(0);
 
+    const [debugPause, setDebugPause, setDebugPauseRef] = useCurrentState(false);
+
     const findItemPair = () => {
         //loop through gridItems
         //find two items of the same type
@@ -306,6 +308,10 @@ const GameProvider = ({ children }) => {
     //add a new item to that spot and stop execution
     //check if there is space in the grid for a new item
     const addForgedItem = () => {
+        if(setDebugPauseRef.current === true){
+            console.log('PAUSING!');
+            return;
+        }
         const spaceInGrid = gridHasSpace();
         if(spaceInGrid){
             for(let i=0; i<gridItemsRef.current.length; i++){
@@ -387,6 +393,8 @@ const GameProvider = ({ children }) => {
         //to be empty and reset the source item to an empty item
         else{
             //first selected item
+            //TODO:
+            //RENAME ALL OF THIS, IT IS SO CONFUSING
             const [sourceIndex, sourceElement] = selectedItem.gridId;
             let prevGridItems = [...gridItemsRef.current];
 
@@ -405,11 +413,36 @@ const GameProvider = ({ children }) => {
                 prevGridItems[rowId][itemId] += 1;
                 //set the previous item to a blank item
                 prevGridItems[sourceIndex][sourceElement] = 0;
+
+                const socketRequest = {
+                    source:{
+                        row:sourceIndex,
+                        col:sourceElement
+                    },
+                    target:{
+                        row:rowId,
+                        col:itemId
+                    }
+                }
+                socket.emit('mergeItems', JSON.stringify(socketRequest));
             }
             //if no item is in this spot
             //swap the items
             else if(itemName === 'Empty' && selectedItem.itemName !== 'Empty'){
-                [prevGridItems[sourceIndex][sourceElement], prevGridItems[rowId][itemId]] = [prevGridItems[rowId][itemId],prevGridItems[sourceIndex][sourceElement]];
+                [prevGridItems[sourceIndex][sourceElement], prevGridItems[rowId][itemId]] = [prevGridItems[rowId][itemId] , prevGridItems[sourceIndex][sourceElement]];
+
+                const socketRequest = {
+                    source:{
+                        row:sourceIndex,
+                        col:sourceElement
+                    },
+                    target:{
+                        row:rowId,
+                        col:itemId
+                    }
+                };
+
+                socket.emit('moveItem', JSON.stringify(socketRequest));
             } 
             else{
                 console.log('These items are not the same OR both spaces are empty');
@@ -475,6 +508,7 @@ const GameProvider = ({ children }) => {
                     socket.disconnect();
                 }
             });
+            socket.on('PAUSE',()=>setDebugPause(true));
             socket.on('Authorized', msg => console.log(msg));
             socket.on('initialize', msg => {
                 const GAME_DATA = JSON.parse(msg);
