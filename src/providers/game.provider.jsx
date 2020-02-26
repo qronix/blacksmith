@@ -335,11 +335,12 @@ const GameProvider = ({ children }) => {
 
     const updateMoney = () => {
         const id = setInterval(() => {
-            setPlayerData(prevPlayerData => {
-                const { money, moneyPerSecond } = prevPlayerData;
-                socket.emit('updateMoney', `${money+moneyPerSecond}`);
-                return { ...prevPlayerData, money:money+moneyPerSecond }
-            });
+            // setPlayerData(prevPlayerData => {
+            //     const { money, moneyPerSecond } = prevPlayerData;
+            //     socket.emit('updateMoney', `${money+moneyPerSecond}`);
+            //     return { ...prevPlayerData, money:money+moneyPerSecond }
+            // });
+            socket.emit('reqMoneyUpdate');
         },1000);
         return id;
     };
@@ -466,9 +467,9 @@ const GameProvider = ({ children }) => {
         return () => clearInterval(id);
     },[]);
 
-    useEffect(() => {
-        updateMoneyPerSecond();
-    },[gridItems, updateMoneyPerSecond]);
+    // useEffect(() => {
+    //     updateMoneyPerSecond();
+    // },[gridItems, updateMoneyPerSecond]);
 
     useEffect(() => {
         //empty counts store the number of grid items
@@ -508,7 +509,7 @@ const GameProvider = ({ children }) => {
                     socket.disconnect();
                 }
             });
-            socket.on('PAUSE',()=>setDebugPause(true));
+            socket.on('PAUSE',() => setDebugPause(true));
             socket.on('Authorized', msg => console.log(msg));
             socket.on('initialize', msg => {
                 const GAME_DATA = JSON.parse(msg);
@@ -520,14 +521,21 @@ const GameProvider = ({ children }) => {
                     upgrades:upgradeData
                 } = GAME_DATA;
 
-                setGridItems([...gridItems]);
+                setGridItems([ ...gridItems ]);
                 setPlayerData({ ...playerData });
                 setModifiers({ ...modifiers });
                 setCurrentForgeProgress(currentForgeProgress);
                 const mergedUpgrades = mergeArraysOfObjects(upgrades, upgradeData);
                 setUpgrades(mergedUpgrades);
             });
-
+            socket.on('clientMoneyUpdate', msg => {
+                const {moneyPerSecond, money} = JSON.parse(msg);
+                setPlayerData({moneyPerSecond, money});
+            });
+            socket.on('gridUpdate', msg => {
+                const grid = JSON.parse(msg);
+                setGridItems([ ...grid ]);
+            });
             socket.open();
         }
         return ()=>{socket.disconnect()};
