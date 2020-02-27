@@ -2,7 +2,9 @@ import React, { createContext, useState, useEffect, useCallback, useRef } from '
 
 import io from 'socket.io-client';
 
-import mergeArrayOfObjects, { mergeArraysOfObjects } from '../utils/utils';
+import { mergeArraysOfObjects } from '../utils/utils';
+
+import { logout } from '../api/api';
 
 import ITEMS from '../item-data';
 import UPGRADES from '../upgrades';
@@ -259,6 +261,7 @@ const GameProvider = ({ children }) => {
     //update the corresponding game property
     const purchaseUpgrade = id => {
         //get upgrade cost
+        console.log('Buying dat upgrade!');
         const upgradeCost = upgrades[id].cost;
         if(upgradeCost <= playerData.money){
             setPlayerData(prevPlayerData => {
