@@ -260,23 +260,66 @@ const GameProvider = ({ children }) => {
     //based on effect modifier
     //update the corresponding game property
     const purchaseUpgrade = id => {
-        //get upgrade cost
-        console.log('Buying dat upgrade!');
+        //establishes the cost of the upgrade
+        //this will be handled on the server
         const upgradeCost = upgrades[id].cost;
         if(upgradeCost <= playerData.money){
+
+            /*
+            //Updates player money to previous money
+            //minus the cost of the upgrade
+            //this will be handled on the server
+            //and sent via moneyUpdate socket event
             setPlayerData(prevPlayerData => {
                 return { ...prevPlayerData, money:(prevPlayerData.money - upgradeCost) }
             });
 
+
+            ///#region 
+            //this processes the upgrade cost
+            //and increases the price of the next upgrade
+            //this will be handled on the server side
             let modUpgrades = upgrades;
             let changedUpgrade = modUpgrades[id];
             let { cost, rank, costDelta, effects } = changedUpgrade;
             cost += (cost * costDelta);
             rank += 1;
+            
             changedUpgrade = { ...changedUpgrade, cost, rank };
             modUpgrades[id] = changedUpgrade;
+
+            ///#endregion
+
+            //lift out to socket.on('clientUpgrades')
             setUpgrades([...modUpgrades]);
+
+            //this enables the effects of the upgrades
+            //the server will need to send this to the client
             processEffects(effects);
+
+            //pseudo for upgrade with server connection
+
+            //client still validates that the player has enough
+            //money to purchase the upgrade. This will save
+            //a network request and server resources
+            //if the player does not have enough money
+            //then deny the request and let the player know
+            //they do not have enough money
+            //IF the client does have enough money then
+            //a socket request "purchaseUpgrade" with the id of
+            //the upgrade will be sent to the server
+            //the server will check that the player has enough money
+            //to purchase the upgrade, if they dont, the request is
+            //denied and an error message will be shown.
+            //If the player does have enough money, the upgrade will
+            //be advanced to the next level, any resulting effects from
+            //the upgrade will be applied to the user session
+            //then updated money, upgrades, and effects will be sent to 
+            //the client via socket messages and the client will 
+            //update the game state accordingly.
+            */
+            console.log('Sending upgrade purchase request to server!!!');
+            socket.emit('buyUpgrade', JSON.stringify({ upgradeID:id }));
         } else{
             console.log('You do not have enough money to purchase this upgrade');
         }
@@ -532,8 +575,17 @@ const GameProvider = ({ children }) => {
                 setUpgrades(mergedUpgrades);
             });
             socket.on('clientMoneyUpdate', msg => {
-                const {moneyPerSecond, money} = JSON.parse(msg);
+                const { moneyPerSecond, money } = JSON.parse(msg);
                 setPlayerData({moneyPerSecond, money});
+            });
+            socket.on('clientUpgrades', msg =>{
+                console.log(msg);
+            });
+            socket.on('clientModifiers', msg => {
+                console.log(msg);
+            });
+            socket.on('clientMsg', msg => {
+                console.log('Got message from server: ', msg);
             });
             socket.on('gridUpdate', msg => {
                 const grid = JSON.parse(msg);
