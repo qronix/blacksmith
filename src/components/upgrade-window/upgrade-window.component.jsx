@@ -21,6 +21,8 @@ const UpgradeWindow = ({ title })=> {
         return upgradeItems;
     };
 
+    const memoizedUpgrades = useMemo(buildUpgrades, [upgrades]);
+
     return(
         <div className='upgrade-window'>
             {/* <div className='upgrade-window-image'/> */}
@@ -31,7 +33,7 @@ const UpgradeWindow = ({ title })=> {
                 <div className='upgrade-window-close' onClick={ toggleUpgrades }/>
             </div>
             <div className='upgrade-window-items'>
-                { buildUpgrades() }
+                { memoizedUpgrades }
             </div>
         </div>
     );
