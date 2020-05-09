@@ -502,6 +502,17 @@ const GameProvider = ({ children }) => {
         }
     }
 
+    const mergeUpgradeData = upgradeData => {
+        //upgradeData is array of objects
+        //iterate through each element
+        //destructure cost, rank, active
+        //merge destructured data with
+        //corresponding data in client state
+        //update state to reflect changes
+        //if initial run, merge all data (data from upgrades array)
+        //else, destructure and update as needed
+        
+    }
 
     useEffect(() => {
         const id = runForge();
@@ -578,11 +589,13 @@ const GameProvider = ({ children }) => {
                 const { moneyPerSecond, money } = JSON.parse(msg);
                 setPlayerData({moneyPerSecond, money});
             });
-            socket.on('clientUpgrades', msg =>{
-                console.log(msg);
+            socket.on('clientUpgrades', msg => {
+                const upgradesFromServer = JSON.parse(msg);
+                setUpgrades(upgradesFromServer);
             });
             socket.on('clientModifiers', msg => {
-                console.log(msg);
+                const modifiersFromServer = JSON.parse(msg);
+                setModifiers(modifiersFromServer);
             });
             socket.on('clientMsg', msg => {
                 console.log('Got message from server: ', msg);
